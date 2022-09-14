@@ -21,3 +21,11 @@ router.get("/api/csrf/restore", (req, res) => {
 // ...
 
 module.exports = router;
+
+/*
+Spots
+npx sequelize model:generate --name Spot --attributes ownerId:integer,address:string,city:string,state:string,country:string,lat:float,lng:float,name:string,description:string,price:number,avgRating:float,previewImage:string
+
+Images
+
+*/

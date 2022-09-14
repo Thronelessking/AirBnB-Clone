@@ -80,7 +80,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: '/api/users/'
+  * URL: '/api/'
   * Headers:
     * Content-Type: application/json
   * Body:
