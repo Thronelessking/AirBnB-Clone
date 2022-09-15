@@ -26,6 +26,12 @@ module.exports = router;
 Spots
 npx sequelize model:generate --name Spot --attributes ownerId:integer,address:string,city:string,state:string,country:string,lat:float,lng:float,name:string,description:string,price:number,avgRating:float,previewImage:string
 
-Images
+Reviews
+npx sequelize model:generate --name Review --attributes userId:integer,spotId:integer,reviewMsg:string,stars:integer
 
+Bookings
+npx sequelize model:generate --name Booking --attributes spotId:integer,userId:string,startDate:dateonly,endDate:dateonly
+
+Images
+npx sequelize model:generate --name Image --attributes url:string,imageableType:string,imageableId:integer
 */

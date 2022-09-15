@@ -31,10 +31,10 @@ const router = express.Router();
 router.get('/:userId');
 
 //Log In
-router.post('/');
+// router.post('/session');
 
 //Sign Up a User
-router.post('/users',
+router.post('/',
   validateSignup,
   async (req, res) => {
     const { firstName, lastName, email, password, username } = req.body;
