@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+
+      Spot.belongsTo(
+        models.User,
+        {
+          foreignKey: 'ownerId'
+        }
+      );
+
     }
   }
   Spot.init({
@@ -56,13 +63,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     avgRating: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: true,
     },
     previewImage: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   }, {
+    defaultScope: {
+      // attributes: {
+      //   exclude: ["id", "createdAt", "updatedAt"]
+      // }
+    },
     sequelize,
     modelName: 'Spot',
   });
