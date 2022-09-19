@@ -12,7 +12,7 @@ router.get('/current', requireAuth,
     async (req, res) => {
         //const owner = await User.findByPk(req.user.id);
         const userId = req.user.id;
-        const allSpots = await Spot.findAll({ where: { ownerId: userId } })
+        const allSpots = await Spot.findAll({ where: { userId } })
         res.json(allSpots);
     }
 );
@@ -76,7 +76,12 @@ router.get('/:spotId',
 
 router.get('/',
     async (req, res, next) => {
-        const allSpots = await Spot.findAll({ order: [['name', 'DESC']] })
+        const allSpots = await Spot.findAll({
+            include: {
+                model: User
+            },
+            order: [['name', 'DESC']]
+        })
         res.json(allSpots);
     }
 );
@@ -168,9 +173,22 @@ router.post('/', requireAuth,
         const userId = req.user.id
         const owner = await User.findByPk(userId)
 
-        const { address, city, state, country, lat, lng, name, description, price } = req.body;
+        const {
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        } = req.body;
 
-        const Spot = await owner.createSpot({ ownerId: userId, address, city, state, country, lat, lng, name, description, price });
+        //console.log(address, city, state, country, lat, lng, name, description, price)
+
+        const Spot = await owner.createSpot({ userId, address, city, state, country, lat, lng, name, description, price });
+        //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
         res.json(Spot);
 
     }

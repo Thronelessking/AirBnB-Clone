@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       }
       );
       Spot.belongsTo(models.User,
-        { foreignKey: 'ownerId' }
+        { foreignKey: 'userId' }
       );
       Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    ownerId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
