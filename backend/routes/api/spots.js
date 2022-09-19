@@ -7,21 +7,53 @@ const { requireAuth } = require('../../utils/auth');
 ** Get **
 ***/
 
-router.get('/',
-    async (req, res, next) => {
-        const allSpots = await Spot.findAll({ order: [['name', 'DESC']] })
-        res.json(allSpots);
-    }
-);
-
 //Get Spots of Current User
 router.get('/current', requireAuth,
     async (req, res) => {
         //const owner = await User.findByPk(req.user.id);
-        const userId = req.user.id
+        const userId = req.user.id;
         const allSpots = await Spot.findAll({ where: { ownerId: userId } })
         res.json(allSpots);
-    });
+    }
+);
+
+//Get All Bookings for a Spot Id
+router.get('/:spotId/bookings',
+    async (req, res) => {
+        const spot = await Spot.findByPk(req.params.spotId);
+        if (!spot) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            //const spot = await Spot.findByPk(req.params.spotId);
+            res.json(spot)
+        }
+
+    }
+);
+
+//Get Reviews by Spot Id
+router.get('/:spotId/reviews',
+    async (req, res) => {
+        const spot = await Spot.findByPk(req.params.spotId);
+        if (!spot) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            //const spot = await Spot.findByPk(req.params.spotId);
+            res.json(spot)
+        }
+
+    }
+);
 
 //Get Spot Details by Id
 router.get('/:spotId',
@@ -42,13 +74,47 @@ router.get('/:spotId',
     }
 );
 
+router.get('/',
+    async (req, res, next) => {
+        const allSpots = await Spot.findAll({ order: [['name', 'DESC']] })
+        res.json(allSpots);
+    }
+);
+
 /*** 
 ** Post **
 ***/
-
-router.post('/:spotId/images',
+//Create a booking based on a spot id
+router.post('/:spotId/bookings',
     async (req, res) => {
         const spot = await Spot.findByPk(req.params.spotId);
+        if (!spot) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            //const spot = await Spot.findByPk(req.params.spotId);
+            res.json(spot)
+        }
+
+    }
+);
+
+router.post('/:spotId/images',
+    requireAuth,
+    async (req, res) => {
+        const userId = req.user.id
+        const spotId = req.params.spotId
+        const spot = await Spot.findByPk(spotId)
+
+        /*Image Table
+        url
+        imageableType
+        imageableId
+        */
 
         if (!spot) {
             const err = new Error('The specified spot does not exist');
@@ -58,25 +124,54 @@ router.post('/:spotId/images',
                 code: err.status
             })
         } else {
-
-            const newImage = await spot.createImage(req.body);
-            res.json(newImage)
-
+            if (spot.userId !== userId) {
+                const err = new Error('You are not authorized to add an image to this spot');
+                err.status = 403
+                res.json({
+                    message: err.message,
+                    code: err.status
+                })
+            } else {
+                const image = await Image.create({
+                    url,
+                    imageableType: spotImage,
+                    imageableId: spotId
+                })
+                res.json(image)
+            }
         }
 
 
     }
 );
 
+router.post('/:spotId/reviews',
+    async (req, res) => {
+        const spot = await Spot.findByPk(req.params.spotId);
+        if (!spot) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            //const spot = await Spot.findByPk(req.params.spotId);
+            res.json(spot)
+        }
+
+    }
+);
+
 router.post('/', requireAuth,
     async (req, res) => {
-
-        const owner = await User.findByPk(req.user.id)
+        const userId = req.user.id
+        const owner = await User.findByPk(userId)
 
         const { address, city, state, country, lat, lng, name, description, price } = req.body;
 
-        const newSpot = await owner.createSpot({ ownerId: req.user.id, address, city, state, country, lat, lng, name, description, price });
-        res.json({ newSpot });
+        const Spot = await owner.createSpot({ ownerId: userId, address, city, state, country, lat, lng, name, description, price });
+        res.json(Spot);
 
     }
 
@@ -86,6 +181,7 @@ router.post('/', requireAuth,
 ** Put **
 ***/
 router.put('/:spotId',
+    requireAuth,
     async (req, res) => {
         if (!spot) {
             const err = new Error('The specified spot does not exist');

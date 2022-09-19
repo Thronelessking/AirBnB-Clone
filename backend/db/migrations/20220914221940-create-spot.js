@@ -10,12 +10,12 @@ module.exports = {
       },
       ownerId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        //allowNull: false,
         references: {
           model: 'Users',
-          key: 'id',
+          key: 'id'
         },
-        onDelete: 'cascade'
+        onDelete: 'cascade',
       },
       address: {
         type: Sequelize.STRING,
@@ -59,9 +59,11 @@ module.exports = {
       },
       previewImage: {
         type: Sequelize.STRING,
+        allowNull: false,
         references: {
           model: 'Images'
-        }
+        },
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

@@ -49,8 +49,25 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
 
+      User.hasOne(models.Image, {
+        foreignKey: 'imageableId',
+        constraints: false,
+        scope: {
+          imageableType: 'User'
+        }
+      });
       User.hasMany(models.Spot, {
         foreignKey: 'ownerId',
+        onDelete: 'CASCADE',
+        hooks: true,
+      });
+      User.hasMany(models.Booking, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        hooks: true,
+      });
+      User.hasMany(models.Review, {
+        foreignKey: 'userId',
         onDelete: 'CASCADE',
         hooks: true,
       });

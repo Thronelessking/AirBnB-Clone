@@ -13,4 +13,12 @@ router.post('/spots/:spotId/reviews');
 
 router.put('/spots/:spotId');
 
+router.delete('/:reviewImageId', requireAuth,
+
+);
+
+router.delete('/:bookingImageId', requireAuth,
+
+);
+
 module.exports = router;

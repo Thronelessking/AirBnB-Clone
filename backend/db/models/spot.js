@@ -11,12 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
 
-      Spot.belongsTo(
-        models.User,
-        {
-          foreignKey: 'ownerId'
-        }
+      Spot.hasMany(models.Review, {
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true,
+      }
       );
+      Spot.hasMany(models.Booking, {
+        foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true,
+      }
+      );
+      Spot.belongsTo(models.User,
+        { foreignKey: 'ownerId' }
+      );
+      Spot.hasMany(models.Image, {
+        foreignKey: 'imageableId',
+        onDelete: 'CASCADE',
+        constraints: false,
+        scope: {
+          imageableType: 'Spot'
+        }
+      });
 
     }
   }
@@ -24,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
     ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        notNull: true,
+      }
     },
     address: {
       type: DataTypes.STRING,
@@ -67,13 +87,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     previewImage: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      defaultValue: false,
     },
   }, {
     defaultScope: {
-      // attributes: {
-      //   exclude: ["id", "createdAt", "updatedAt"]
-      // }
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt"]
+      }
     },
     sequelize,
     modelName: 'Spot',

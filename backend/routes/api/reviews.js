@@ -4,14 +4,21 @@ const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
-router.get('/current', requireAuth,
+router.get('/current',
+    requireAuth,
     async (req, res) => {
-
+        const userId = req.user.id
+        const allReviews = await Review.findAll({ where: { userId } })
+        res.json(allReviews);
     }
 );
-router.get('/:reviewId');
 
-
+router.get('/:reviewId',
+    requireAuth,
+    async (req, res) => {
+        const userId = req.user.id;
+    }
+);
 
 router.post('/:reviewId/images',
     async (req, res) => {
@@ -19,8 +26,15 @@ router.post('/:reviewId/images',
     }
 );
 
-router.post('/spots');
+router.put('/:reviewId',
+    requireAuth,
+    async (req, res) => {
 
-router.put('/:reviewId');
+    }
+);
+
+router.delete('/:reviewId', requireAuth,
+
+);
 
 module.exports = router;

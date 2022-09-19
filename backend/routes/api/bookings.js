@@ -1,16 +1,25 @@
 const express = require('express');
-const { Booking } = require('../../db/models');
+const { User, Booking } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
 router.get('/spots/:spotId');
-router.get('/spots/current');
-router.get('/spots');
 
+//Get current bookings for current user
+router.get('/current',
+    requireAuth,
+    async (req, res) => {
+        const userId = req.user.id
+        const allBookings = await Booking.findAll({ where: { userId } })
+        res.json(allBookings);
+    }
+);
 
-router.post('/spots/:spotId/images');
-router.post('/spots');
+router.put('/:bookingId', requireAuth,);
 
-router.put('/spots/:spotId');
+router.delete('/:bookingId', requireAuth,
+
+);
 
 module.exports = router;

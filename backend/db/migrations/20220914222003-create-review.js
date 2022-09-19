@@ -9,12 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users'
+        },
+        onDelete: 'cascade',
       },
       spotId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Spots'
+        },
+        onDelete: 'cascade',
       },
-      reviewMsg: {
+      content: {
         type: Sequelize.STRING
       },
       stars: {
