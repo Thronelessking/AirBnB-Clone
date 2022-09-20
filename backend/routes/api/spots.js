@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Spot, Image } = require('../../db/models');
+const { User, Spot, Image, Review } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 /*** 
@@ -171,8 +171,6 @@ router.post('/:spotId/reviews',
 router.post('/', requireAuth,
     async (req, res) => {
         const userId = req.user.id
-        const owner = await User.findByPk(userId)
-
         const {
             address,
             city,
@@ -184,11 +182,14 @@ router.post('/', requireAuth,
             description,
             price
         } = req.body;
+        const owner = await User.findByPk(userId)
+        //console.log(userId, owner.id)
+
 
         //console.log(address, city, state, country, lat, lng, name, description, price)
 
-        const Spot = await owner.createSpot({ userId, address, city, state, country, lat, lng, name, description, price });
-        //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
+        const spot = await owner.createSpot({ address, city, state, country, lat, lng, name, description, price });
+        // //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
         res.json(Spot);
 
     }

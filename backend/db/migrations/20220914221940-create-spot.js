@@ -6,16 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'id'
-        },
-        onDelete: 'cascade',
       },
       address: {
         type: Sequelize.STRING,
@@ -50,7 +41,7 @@ module.exports = {
         allowNull: false,
       },
       price: {
-        type: Sequelize.NUMBER,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       avgRating: {
@@ -59,7 +50,7 @@ module.exports = {
       },
       previewImage: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Images'
         },
@@ -74,6 +65,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'Users' },
+        onDelete: 'cascade',
       }
     });
   },

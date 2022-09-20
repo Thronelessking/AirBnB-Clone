@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       );
       Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
-        onDelete: 'CASCADE',
         constraints: false,
         scope: {
           imageableType: 'Spot'
@@ -41,9 +40,6 @@ module.exports = (sequelize, DataTypes) => {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
-        notNull: true,
-      }
     },
     address: {
       type: DataTypes.STRING,
@@ -78,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     avgRating: {

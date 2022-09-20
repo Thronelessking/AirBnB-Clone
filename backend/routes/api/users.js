@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Booking, Spot, Review } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -28,7 +28,14 @@ const validateSignup = [
 
 const router = express.Router();
 
-router.get('/:userId');
+router.get('/:userId', requireAuth, async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    include: { model: Review },
+    include: { model: Spot },
+    include: { model: Booking }
+  })
+  res.json(user)
+});
 
 //Log In
 // router.post('/session');
