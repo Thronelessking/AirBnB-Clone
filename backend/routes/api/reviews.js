@@ -1,5 +1,5 @@
 const express = require('express');
-const { Review } = require('../../db/models');
+const { User, Spot, Image, Review } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
@@ -7,9 +7,9 @@ const router = express.Router();
 router.get('/current',
     requireAuth,
     async (req, res) => {
-        const userId = req.user.id
-        const allReviews = await Review.findAll({ where: { userId } })
-        res.json(allReviews);
+        const owner = await User.findByPk(req.user.id);
+        const allReviews = await owner.getReviews()
+        res.json({ allReviews });
     }
 );
 
@@ -24,38 +24,32 @@ router.post('/:reviewId/images',
     requireAuth,
     async (req, res) => {
         //beginning of async
-        const userId = req.user.id
+
         const reviewId = req.params.reviewId
-        const review = await Review.findByPk(reviewId)
+        const reviewContent = await Review.findByPk(reviewId)
 
-        /*Image Table
-        url
-        imageableType
-        imageableId
-        */
-
-        if (!review) {
-            const err = new Error('The specified spot does not exist');
+        if (!reviewContent) {
+            const err = new Error("Review couldn't be found");
             err.status = 404
             res.json({
                 message: err.message,
                 code: err.status
             });
-        } else if (spot.ownerId !== userId) {
-            const err = new Error('You are not authorized to add an image to this spot');
-            err.status = 403
-            res.json({
-                message: err.message,
-                code: err.status
-            })
+            // } else if (spot.ownerId !== userId) {
+            //     const err = new Error('You are not authorized to add an image to this spot');
+            //     err.status = 403
+            //     res.json({
+            //         message: err.message,
+            //         code: err.status
+            //     })
         } else {
             const { url } = req.body;
-            const image = await Image.create({
+            const reviewImage = await Image.create({
                 url,
                 imageableType: 'Review',
-                imageableId: spotId
+                imageableId: reviewId
             })
-            res.json(image)
+            res.json(reviewImage)
         }
         //end of async
     }
@@ -64,7 +58,27 @@ router.post('/:reviewId/images',
 router.put('/:reviewId',
     requireAuth,
     async (req, res) => {
+        const reviewContent = await Review.findByPk(req.params.reviewId);
+        if (!reviewContent) {
+            const err = new Error("Review couldn't be found");
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            const {
+                review,
+                stars
+            } = req.body;
+            const updateReview = await reviewContent.set({
+                content: review,
+                stars
+            });
+            updateReview.save();
+            res.json(updateReview)
 
+        }
     }
 );
 

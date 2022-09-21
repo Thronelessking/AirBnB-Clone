@@ -45,9 +45,9 @@ router.use('/users', usersRouter);
 
 router.use('/spots', spotsRouter);
 
-router.use('/reviewsRouter', reviewsRouter);
+router.use('/reviews', reviewsRouter);
 
-router.use('/bookingsRouter', bookingsRouter);
+router.use('/bookings', bookingsRouter);
 
 router.post('/test', (req, res) => {
     res.json({ requestBody: req.body });

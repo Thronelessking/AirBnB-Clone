@@ -10,15 +10,15 @@ const { requireAuth } = require('../../utils/auth');
 //Get Spots of Current User
 router.get('/current', requireAuth,
     async (req, res) => {
-        //const owner = await User.findByPk(req.user.id);
-        const userId = req.user.id;
-        const allSpots = await Spot.findAll({ where: { ownerId: userId } })
+        const owner = await User.findByPk(req.user.id);
+        const allSpots = await owner.getSpots()
         res.json(allSpots);
     }
 );
 
 //Get All Bookings for a Spot Id
 router.get('/:spotId/bookings',
+    requireAuth,
     async (req, res) => {
         const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
@@ -38,6 +38,7 @@ router.get('/:spotId/bookings',
 
 //Get Reviews by Spot Id
 router.get('/:spotId/reviews',
+    requireAuth,
     async (req, res) => {
         const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
@@ -57,6 +58,7 @@ router.get('/:spotId/reviews',
 
 //Get Spot Details by Id
 router.get('/:spotId',
+    requireAuth,
     async (req, res) => {
         const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
@@ -75,6 +77,7 @@ router.get('/:spotId',
 );
 
 router.get('/',
+    requireAuth,
     async (req, res, next) => {
         const allSpots = await Spot.findAll({
             include: {
@@ -91,6 +94,7 @@ router.get('/',
 ***/
 //Create a booking based on a spot id
 router.post('/:spotId/bookings',
+    requireAuth,
     async (req, res) => {
         const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
@@ -129,22 +133,15 @@ router.post('/:spotId/images',
                 code: err.status
             })
         } else {
-            if (spot.ownerId !== userId) {
-                const err = new Error('You are not authorized to add an image to this spot');
-                err.status = 403
-                res.json({
-                    message: err.message,
-                    code: err.status
-                })
-            } else {
-                const { url } = req.body;
-                const image = await Image.create({
-                    url,
-                    imageableType: 'Spot',
-                    imageableId: spotId
-                })
-                res.json(image)
-            }
+
+            const { url } = req.body;
+            const image = await Image.create({
+                url,
+                imageableType: 'Spot',
+                imageableId: spotId
+            })
+            res.json(image)
+
         }
 
 
@@ -261,6 +258,7 @@ router.put('/:spotId',
 ** Delete **
 ***/
 router.delete('/:spotId',
+    requireAuth,
     async (req, res) => {
         if (!spot) {
             const err = new Error('The specified spot does not exist');
