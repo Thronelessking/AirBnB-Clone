@@ -12,7 +12,7 @@ router.get('/current', requireAuth,
     async (req, res) => {
         //const owner = await User.findByPk(req.user.id);
         const userId = req.user.id;
-        const allSpots = await Spot.findAll({ where: { userId } })
+        const allSpots = await Spot.findAll({ where: { ownerId: userId } })
         res.json(allSpots);
     }
 );
@@ -49,9 +49,9 @@ router.get('/:spotId/reviews',
             })
         } else {
             //const spot = await Spot.findByPk(req.params.spotId);
-            res.json(spot)
+            allReviews = spot.getReviews()
+            res.json(allReviews)
         }
-
     }
 );
 
@@ -78,7 +78,7 @@ router.get('/',
     async (req, res, next) => {
         const allSpots = await Spot.findAll({
             include: {
-                model: User
+                model: User,
             },
             order: [['name', 'DESC']]
         })
@@ -129,7 +129,7 @@ router.post('/:spotId/images',
                 code: err.status
             })
         } else {
-            if (spot.userId !== userId) {
+            if (spot.ownerId !== userId) {
                 const err = new Error('You are not authorized to add an image to this spot');
                 err.status = 403
                 res.json({
@@ -137,9 +137,10 @@ router.post('/:spotId/images',
                     code: err.status
                 })
             } else {
+                const { url } = req.body;
                 const image = await Image.create({
                     url,
-                    imageableType: spotImage,
+                    imageableType: 'Spot',
                     imageableId: spotId
                 })
                 res.json(image)
@@ -151,18 +152,41 @@ router.post('/:spotId/images',
 );
 
 router.post('/:spotId/reviews',
-    async (req, res) => {
-        const spot = await Spot.findByPk(req.params.spotId);
+    requireAuth,
+    async (req, res, next) => {
+        const userId = req.user.id;
+        const spotId = req.params.spotId
+        const spot = await Spot.findByPk(spotId);
+        const { review, stars } = req.body;
+        const existingReview = await Review.findAll({
+            where: {
+                userId,
+                spotId,
+            }
+        });
+
         if (!spot) {
-            const err = new Error('The specified spot does not exist');
+            const err = new Error("Spot couldn't be found");
             err.status = 404
             res.json({
                 message: err.message,
                 code: err.status
             })
+        } else if (existingReview) {
+            const err = new Error("User already has a review for this spot");
+            err.status = 403;
+            res.json({
+                message: err.message,
+                code: err.status
+            })
         } else {
-            //const spot = await Spot.findByPk(req.params.spotId);
-            res.json(spot)
+            const reviewSpot = await spot.createReview({
+                userId,
+                spotId,
+                content: review,
+                stars
+            });
+            res.json(reviewSpot)
         }
 
     }
@@ -188,9 +212,9 @@ router.post('/', requireAuth,
 
         //console.log(address, city, state, country, lat, lng, name, description, price)
 
-        const spot = await owner.createSpot({ address, city, state, country, lat, lng, name, description, price });
+        const spot = await owner.createSpot({ ownerId: userId, address, city, state, country, lat, lng, name, description, price });
         // //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
-        res.json(Spot);
+        res.json(spot);
 
     }
 
@@ -202,6 +226,8 @@ router.post('/', requireAuth,
 router.put('/:spotId',
     requireAuth,
     async (req, res) => {
+        const userId = req.user.id
+        const spot = await Spot.findOne({ where: { id: req.params.spotId } });
         if (!spot) {
             const err = new Error('The specified spot does not exist');
             err.status = 404
@@ -210,9 +236,20 @@ router.put('/:spotId',
                 code: err.status
             })
         } else {
-
-            // const newImage = await spot.createImage(req.body);
-            // res.json(newImage)
+            const {
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price
+            } = req.body;
+            const updateSpot = await spot.set({ address, city, state, country, lat, lng, name, description, price });;
+            updateSpot.save();
+            res.json(updateSpot)
 
         }
     }
