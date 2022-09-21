@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { User, Spot, Image, Review } = require('../../db/models');
+const { User, Spot, Image, Review, Booking } = require('../../db/models');
+const booking = require('../../db/models/booking');
 const { requireAuth } = require('../../utils/auth');
 
 /*** 
@@ -96,17 +97,43 @@ router.get('/',
 router.post('/:spotId/bookings',
     requireAuth,
     async (req, res) => {
-        const spot = await Spot.findByPk(req.params.spotId);
+        const userId = req.user.id;
+        const spotId = req.params.spotId
+        const spot = await Spot.findByPk(spotId);
+
+        const existingBooking = await Booking.findAll({
+            where: {
+                userId,
+                spotId,
+            }
+        });
+        // spotId
+        // userId
+        // startDate
+        // endDate
         if (!spot) {
             const err = new Error('The specified spot does not exist');
             err.status = 404
             res.json({
                 message: err.message,
                 code: err.status
-            })
+            });
+        } else if (existingBooking) {
+            const err = new Error("User already has a booking for this spot");
+            err.status = 403;
+            res.json({
+                message: err.message,
+                code: err.status
+            });
         } else {
-            //const spot = await Spot.findByPk(req.params.spotId);
-            res.json(spot)
+            const { startDate, endDate } = req.body;
+            const booking = await spot.createBooking({
+                spotId,
+                userId,
+                startDate,
+                endDate
+            })
+            res.json(booking)
         }
 
     }
@@ -115,7 +142,6 @@ router.post('/:spotId/bookings',
 router.post('/:spotId/images',
     requireAuth,
     async (req, res) => {
-        const userId = req.user.id
         const spotId = req.params.spotId
         const spot = await Spot.findByPk(spotId)
 
@@ -176,7 +202,7 @@ router.post('/:spotId/reviews',
             res.json({
                 message: err.message,
                 code: err.status
-            })
+            });
         } else {
             const { review, stars } = req.body;
             const reviewSpot = await spot.createReview({
