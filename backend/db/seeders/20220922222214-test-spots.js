@@ -18,7 +18,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        ownerId: 1,
+        ownerId: 4,
         address: "9992 Liberty Street",
         city: "Derry",
         state: "New Hampshire",
@@ -31,7 +31,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        ownerId: 3,
+        ownerId: 1,
         address: "7958 Magnolia Avenue",
         city: "Linden",
         state: "New Jersey",
@@ -44,8 +44,8 @@ module.exports = {
         previewImage: false,
       },
       {
-        ownerId: 3,
-        address: "aaa123 Disney Lane",
+        ownerId: 2,
+        address: "123 Driver Lane",
         city: "San Francisco",
         state: "California",
         country: "United States of America",
@@ -54,33 +54,9 @@ module.exports = {
         name: "App Academy",
         description: "Place where web developers are created",
         price: 567,
-      },
-      {
-        ownerId: 2,
-        address: "3452 Argyle Drive",
-        city: "Vienna",
-        state: "Virginia",
-        country: "United States of America",
-        lat: 77.7645358,
-        lng: -128.4730327,
-        name: "Also Budget House",
-        description: "Dont go out at night but cheap residents",
-        price: 54,
         previewImage: false,
       },
-      {
-        ownerId: 2,
-        address: "194 Argyle Drive",
-        city: "Vienna",
-        state: "Virginia",
-        country: "United States of America",
-        lat: 56.7645358,
-        lng: -25.4730327,
-        name: "Budget House",
-        description: "This is a shady area but the price is cheap",
-        price: 32,
-        previewImage: false,
-      }
+
     ], {});
 
   },
@@ -88,7 +64,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete('Spots', {
-      onwerId: { [Op.in]: [1, 2, 3, 4, 5, 6] }
+      address: { [Op.in]: ["194 Argyle Drive", "3452 Argyle Drive", "123 Driver Lane", "7958 Magnolia Avenue", "9992 Liberty Street", "12 Baller Avenue"] }
     }, {});
 
   }
