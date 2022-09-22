@@ -22,7 +22,7 @@ router.get('/:reviewId',
 
 router.post('/:reviewId/images',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         //beginning of async
 
         const reviewId = req.params.reviewId
@@ -57,7 +57,7 @@ router.post('/:reviewId/images',
 
 router.put('/:reviewId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const reviewContent = await Review.findByPk(req.params.reviewId);
         if (!reviewContent) {
             const err = new Error("Review couldn't be found");
@@ -84,7 +84,7 @@ router.put('/:reviewId',
 
 router.delete('/:reviewId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const review = await Review.findByPk(req.params.reviewId);
         if (!review) {
             const err = new Error('The specified spot does not exist');

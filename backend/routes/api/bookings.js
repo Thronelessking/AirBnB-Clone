@@ -8,7 +8,7 @@ const { requireAuth } = require('../../utils/auth');
 //Get current bookings for current user
 router.get('/current',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const userId = req.user.id
         const allBookings = await Booking.findAll({ where: { userId } });
         // const owner = await User.findByPk(req.user.id);
@@ -20,7 +20,7 @@ router.get('/current',
 
 router.put('/:bookingId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const booking = await Booking.findOne({ where: { id: req.params.bookingId } });
         if (!booking) {
             const err = new Error('The specified spot does not exist');
@@ -47,7 +47,7 @@ router.put('/:bookingId',
 
 router.delete('/:bookingId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         const booking = await Booking.findByPk(req.params.bookingId);
         if (!booking) {
             const err = new Error('The specified spot does not exist');

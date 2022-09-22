@@ -33,9 +33,9 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    const Op = Sequelize.Op;
+    //const Op = Sequelize.Op;
     await queryInterface.bulkDelete('Bookings', {
-      spotId: { [Op.in]: [1, 2, 3] }
+      spotId: [1, 2, 3]
     }, {});
   }
 };

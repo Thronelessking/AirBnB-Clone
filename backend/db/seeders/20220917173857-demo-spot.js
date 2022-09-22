@@ -5,7 +5,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('Spots', [
       {
-        userId: 1,
+        ownerId: 1,
         address: "12 Baller Avenue",
         city: "San Francisco",
         state: "California",
@@ -18,7 +18,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        userId: 1,
+        ownerId: 1,
         address: "9992 Liberty Street",
         city: "Derry",
         state: "New Hampshire",
@@ -31,7 +31,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        userId: 3,
+        ownerId: 3,
         address: "7958 Magnolia Avenue",
         city: "Linden",
         state: "New Jersey",
@@ -44,7 +44,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        userId: 3,
+        ownerId: 3,
         address: "aaa123 Disney Lane",
         city: "San Francisco",
         state: "California",
@@ -56,7 +56,7 @@ module.exports = {
         price: 567,
       },
       {
-        userId: 2,
+        ownerId: 2,
         address: "3452 Argyle Drive",
         city: "Vienna",
         state: "Virginia",
@@ -69,7 +69,7 @@ module.exports = {
         previewImage: false,
       },
       {
-        userId: 2,
+        ownerId: 2,
         address: "194 Argyle Drive",
         city: "Vienna",
         state: "Virginia",
@@ -88,7 +88,7 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     const Op = Sequelize.Op;
     await queryInterface.bulkDelete('Spots', {
-      userId: { [Op.in]: [1, 2, 3, 4, 5, 6] }
+      onwerId: { [Op.in]: [1, 2, 3, 4, 5, 6] }
     }, {});
 
   }

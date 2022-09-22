@@ -9,11 +9,27 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+    // static async addSpotListing({ }) {
+    //   const spot = await Spot.create({
+    //     ownerId: userId,
+    //     address,
+    //     city,
+    //     state,
+    //     country,
+    //     lat,
+    //     lng,
+    //     name,
+    //     description,
+    //     price
+    //   });
+
+    // }
+
     static associate(models) {
 
       Spot.belongsTo(
         models.User,
-        { foreignKey: 'ownerId' }
+        { foreignKey: 'ownerId', as: 'Owner' }
       );
 
       Spot.hasMany(models.Review, {
@@ -31,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
+        as: 'SpotImages',
         constraints: false,
         scope: {
           imageableType: 'Spot'
@@ -71,6 +88,9 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: [2, 49],
+      }
     },
     description: {
       type: DataTypes.STRING,

@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.delete('/:reviewImageId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         //const review = await Review
         const reviewImage = await Image.findOne(
             {
@@ -42,7 +42,7 @@ router.delete('/:reviewImageId',
 
 router.delete('/:spotImageId',
     requireAuth,
-    async (req, res) => {
+    async (req, res, next) => {
         //const review = await Review
         const spotImage = await Image.findOne(
             {
