@@ -82,8 +82,25 @@ router.put('/:reviewId',
     }
 );
 
-router.delete('/:reviewId', requireAuth,
-
+router.delete('/:reviewId',
+    requireAuth,
+    async (req, res) => {
+        const review = await Review.findByPk(req.params.reviewId);
+        if (!review) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            await review.destroy();
+            res.json({
+                message: 'Successful',
+                statusCode: 400
+            });
+        }
+    }
 );
 
 module.exports = router;

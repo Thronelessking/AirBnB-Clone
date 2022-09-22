@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const { User, Spot, Image, Review, Booking } = require('../../db/models');
-const booking = require('../../db/models/booking');
+// const booking = require('../../db/models/booking');
 const { requireAuth } = require('../../utils/auth');
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
 
+const validateSpot = [
+    check('address')
+        .exists({ checkFalsy: true }),
+    handleValidationErrors
+];
 /*** 
 ** Get **
 ***/
@@ -12,8 +19,8 @@ const { requireAuth } = require('../../utils/auth');
 router.get('/current', requireAuth,
     async (req, res) => {
         const owner = await User.findByPk(req.user.id);
-        const allSpots = await owner.getSpots()
-        res.json(allSpots);
+        const Spots = await owner.getSpots()
+        res.json({ Spots });
     }
 );
 
@@ -28,7 +35,7 @@ router.get('/:spotId/bookings',
             res.json({
                 message: err.message,
                 code: err.status
-            })
+            });
         } else {
             //const spot = await Spot.findByPk(req.params.spotId);
             res.json(spot)
@@ -61,7 +68,21 @@ router.get('/:spotId/reviews',
 router.get('/:spotId',
     requireAuth,
     async (req, res) => {
-        const spot = await Spot.findByPk(req.params.spotId);
+        const spot = await Spot.findOne({
+            where: { id: req.params.spotId },
+            include: [
+                {
+                    model: Image,
+                    // as: "SpotImages"
+                },
+                {
+                    model: User,
+                    // as: 'Owner'
+                }
+            ]
+        }
+        );
+        const owner = await spot.getUser();
         if (!spot) {
             const err = new Error('The specified spot does not exist');
             err.status = 404
@@ -71,7 +92,7 @@ router.get('/:spotId',
             })
         } else {
             //const spot = await Spot.findByPk(req.params.spotId);
-            res.json(spot)
+            res.json(spot);
         }
 
     }
@@ -80,13 +101,59 @@ router.get('/:spotId',
 router.get('/',
     requireAuth,
     async (req, res, next) => {
-        const allSpots = await Spot.findAll({
+        let query = {
+            where: {},
+            include: [],
+        };
+
+        const {
+            maxLat,
+            minLat,
+            minLng,
+            maxLng,
+            minPrice,
+            maxPrice
+        } = req.query;
+
+        //let { page, size } = req.query;
+        const page = req.query.page === undefined ? 0 : parseInt(req.query.page);
+        const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
+
+        if (!page || isNaN(page) || page <= 0) {
+            page = 0;
+        }
+
+        if (!size || isNaN(size) || size <= 0) {
+            size = 20;
+        }
+
+        if (size > 20) {
+            size = 20;
+        }
+        if (page) {
+
+        } else if (size) {
+
+        } else {
+
+        }
+        page = Number(page);
+        size = Number(size);
+
+        const Spots = await Spot.findAll({
             include: {
                 model: User,
             },
-            order: [['name', 'DESC']]
-        })
-        res.json(allSpots);
+            limit: size,
+            offset: size * (page - 1),
+        });
+
+        return res.json({
+            Spots,
+            page,
+            size,
+        });
+        //res.json(allSpots);
     }
 );
 
@@ -286,6 +353,7 @@ router.put('/:spotId',
 router.delete('/:spotId',
     requireAuth,
     async (req, res) => {
+        const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
             const err = new Error('The specified spot does not exist');
             err.status = 404
@@ -294,7 +362,11 @@ router.delete('/:spotId',
                 code: err.status
             })
         } else {
-
+            await spot.destroy();
+            res.json({
+                message: 'Successful',
+                statusCode: 400
+            });
         }
     }
 );

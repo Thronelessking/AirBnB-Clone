@@ -1,8 +1,9 @@
 const express = require('express');
-const { User, Booking } = require('../../db/models');
+const router = express.Router();
+const { Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
-const router = express.Router();
+
 
 //Get current bookings for current user
 router.get('/current',
@@ -44,8 +45,25 @@ router.put('/:bookingId',
     }
 );
 
-router.delete('/:bookingId', requireAuth,
-
+router.delete('/:bookingId',
+    requireAuth,
+    async (req, res) => {
+        const booking = await Booking.findByPk(req.params.bookingId);
+        if (!booking) {
+            const err = new Error('The specified spot does not exist');
+            err.status = 404
+            res.json({
+                message: err.message,
+                code: err.status
+            })
+        } else {
+            await booking.destroy();
+            res.json({
+                message: 'Successful',
+                statusCode: 400
+            });
+        }
+    }
 );
 
 module.exports = router;

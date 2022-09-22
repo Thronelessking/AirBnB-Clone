@@ -90,9 +90,18 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     defaultScope: {
-      attributes: {
-        //exclude: ["id", "createdAt", "updatedAt"]
-      }
+      // attributes: {
+      //   exclude: ["createdAt", "updatedAt"]
+      // }
+    },
+    scopes: {
+      // atSpot(spotId) {
+      //   const { Image, User } = require('../models');
+      //   return {
+      //     where: { spotId },
+      //     include: [{ model: Image }]
+      //   }
+      // }
     },
     sequelize,
     modelName: 'Spot',
