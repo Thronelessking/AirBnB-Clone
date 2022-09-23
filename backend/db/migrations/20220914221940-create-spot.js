@@ -55,7 +55,7 @@ module.exports = {
         allowNull: true,
       },
       previewImage: {
-        type: Sequelize.STRING,
+        type: Sequelize.BOOLEAN,
         allowNull: true,
       },
       createdAt: {
