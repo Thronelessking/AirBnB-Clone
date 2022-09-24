@@ -21,10 +21,31 @@ module.exports = (sequelize, DataTypes) => {
   Booking.init({
     spotId: { type: DataTypes.INTEGER, allowNull: false, },
     userId: { type: DataTypes.INTEGER, allowNull: false, },
-    startDate: { type: DataTypes.DATEONLY, allowNull: false, },
-    endDate: { type: DataTypes.DATEONLY, allowNull: false, },
+    startDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        isDate: true,
+      }
+    },
+    endDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        isDate: true,
+      }
+    },
   }, {
     sequelize,
+    validate: {
+      endBeforeStart() {
+        //const err = new Error("endDate cannot be on or before startDate");
+        //err.code = 403;
+        if (this.startDate >= this.endDate) {
+          throw new Error("endDate cannot be on or before startDate", { status: 404 });
+        }
+      }
+    },
     modelName: 'Booking',
   });
   return Booking;

@@ -24,17 +24,17 @@ router.delete('/:reviewImageId',
         );
 
         if (!reviewImage) {
-            const err = new Error('The specified spot does not exist');
+            const err = new Error("Review Image couldn't be found");
             err.status = 404
-            res.json({
+            res.status(404).json({
                 message: err.message,
                 code: err.status
             });
         } else {
             await reviewImage.destroy();
             res.json({
-                message: 'Successful',
-                statusCode: 400
+                message: "Successfully deleted",
+                statusCode: 200
             });
         }
     }
@@ -43,25 +43,33 @@ router.delete('/:reviewImageId',
 router.delete('/:spotImageId',
     requireAuth,
     async (req, res, next) => {
+        const userId = req.user.id;
         //const review = await Review
         const spotImage = await Image.findOne(
             {
                 where: { id: req.params.spotImageId }
             }
         );
+        const spot = await Spot.findByPk(spotImage.spotId)
 
         if (!spotImage) {
-            const err = new Error('The specified spot does not exist');
+            const err = new Error("Spot Image couldn't be found");
             err.status = 404
-            res.json({
+            res.status(404).json({
                 message: err.message,
                 code: err.status
             });
+        } else if (userId !== spot.userId) {
+            const err = new Error("Forbidden");
+            err.title = "Forbidden";
+            err.errors = "Forbidden";
+            err.status = 403;
+            return next(err);
         } else {
             await spotImage.destroy();
             res.json({
-                message: 'Successful',
-                statusCode: 400
+                message: "Successfully deleted",
+                statusCode: 200
             });
         }
     }

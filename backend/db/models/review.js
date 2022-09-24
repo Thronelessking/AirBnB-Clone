@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Review.hasMany(models.Image, {
         foreignKey: 'imageableId',
+        as: 'ReviewImages',
         constraints: false,
         scope: {
           imageableType: 'Review'
@@ -28,10 +29,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Review.init({
-    userId: DataTypes.INTEGER,
-    spotId: DataTypes.INTEGER,
-    content: DataTypes.STRING,
-    stars: DataTypes.INTEGER,
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    spotId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    stars: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1,
+        max: 5
+      }
+    },
   }, {
     sequelize,
     modelName: 'Review',

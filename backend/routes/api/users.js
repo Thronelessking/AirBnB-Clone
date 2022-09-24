@@ -7,6 +7,12 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateSignup = [
+  check('firstName')
+    .exists({ checkFalsy: true })
+    .withMessage("First Name is required"),
+  check('lastName')
+    .exists({ checkFalsy: true })
+    .withMessage("Last Name is required"),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
@@ -28,7 +34,7 @@ const validateSignup = [
 
 const router = express.Router();
 
-router.get('/:userId', requireAuth, async (req, res) => {
+router.get('/:userId', requireAuth, async (req, res, next) => {
   const user = await User.findByPk(req.params.id, {
     include: { model: Review },
     include: { model: Spot },
@@ -43,7 +49,7 @@ router.get('/:userId', requireAuth, async (req, res) => {
 //Sign Up a User
 router.post('/',
   validateSignup,
-  async (req, res) => {
+  async (req, res, next) => {
     const { firstName, lastName, email, password, username } = req.body;
     const user = await User.signup({ firstName, lastName, email, username, password });
 
