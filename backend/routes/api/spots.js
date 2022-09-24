@@ -289,7 +289,7 @@ router.get('/',
         // const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
 
         if (!page || isNaN(page)) {
-            page = 0;
+            page = 1;
         } else if (page < 0) {
             res.status(400);
             return res.json({
