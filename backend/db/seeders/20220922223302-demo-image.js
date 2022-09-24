@@ -5,31 +5,37 @@ module.exports = {
 
     await queryInterface.bulkInsert('Images', [
       {
+        previewImage: false,
         url: "user2.jpg",
-        imageableType: "User",
+        imageableType: "Spot",
         imageableId: 2
       },
       {
+        previewImage: false,
         url: "review2.jpg",
         imageableType: "Review",
         imageableId: 2
       },
       {
+        previewImage: false,
         url: "spot2.jpg",
         imageableType: "Spot",
         imageableId: 2
       },
       {
+        previewImage: false,
         url: "spot1.jpg",
         imageableType: "Spot",
         imageableId: 1
       },
       {
+        previewImage: false,
         url: "userprofile1.jpg",
-        imageableType: "User",
+        imageableType: "Spot",
         imageableId: 1
       },
       {
+        previewImage: false,
         url: "review1.jpg",
         imageableType: "Review",
         imageableId: 1

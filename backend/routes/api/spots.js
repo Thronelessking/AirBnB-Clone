@@ -265,12 +265,21 @@ router.get('/',
             });
         }
 
-        if (!size || isNaN(size) || size <= 0) {
-            size = 20;
+        if (page > 10) {
+            page = 10;
         }
 
-        if (size > 10) {
-            size = 10;
+        if (!size || isNaN(size) || size <= 0) {
+            size = 20;
+        } else if (size < 0) {
+            res.status(400);
+            return res.json({
+                errors: [{ page: "Size must be greater than or equal to 0" }],
+            });
+        }
+
+        if (size > 20) {
+            size = 20;
         }
 
         page = Number(page);
@@ -289,18 +298,42 @@ router.get('/',
         // size = Number(size);
 
         const Spots = await Spot.findAll({
-            include: {
-                model: User,
-                as: 'Owner'
-            },
+            where,
+            include: [
+                {
+                    model: User,
+                    as: 'Owner'
+                },
+                {
+                    model: Image,
+                    as: 'SpotImages'
+                }
+            ],
             limit: size,
             offset: size * (page - 1),
         });
+        let spotList = [];
+        Spots.forEach(spot => {
+            spotList.push(spot.toJSON())
+        });
 
+        spotList.forEach(spot => {
+            spot.SpotImages.forEach(image => {
+                //console.log(image.previewImage)
+                if (image.previewImage === true) {
+                    spot.previewImage = image.url
+                }
+            })
+            if (!spot.previewImage) {
+                spot.previewImage = "no preview image found"
+            }
+            delete spot.SpotImages
+        })
         return res.json({
             Spots,
             page,
             size,
+            spotList
         });
         //res.json(allSpots);
     }
@@ -377,11 +410,11 @@ router.post('/:spotId/bookings',
 
             const err = new Error("Sorry, this spot is already booked for the specified dates");
             err.status = 403;
-            err.errors;
+            // err.errors;
             res.status(403).json({
                 message: err.message,
                 statusCode: err.status,
-                errors
+                // errors
             });
         } else if (userId === spot.ownerId) {
             const err = new Error('Cannot book your your own listing/spot');
@@ -438,8 +471,9 @@ router.post('/:spotId/images',
 
             // console.log(spot.ownerId)
             // console.log(req.user.id)
-            const { url } = req.body;
+            const { previewImage, url } = req.body;
             const image = await Image.create({
+                previewImage,
                 url,
                 imageableType: 'Spot',
                 imageableId: spotId

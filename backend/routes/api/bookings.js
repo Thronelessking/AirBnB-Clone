@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Booking } = require('../../db/models');
+const { Booking, Spot, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const { check } = require('express-validator');
@@ -46,7 +46,14 @@ router.get('/current',
     requireAuth,
     async (req, res, next) => {
         const userId = req.user.id
-        const Bookings = await Booking.findAll({ where: { userId } });
+        const Bookings = await Booking.findAll({
+            where: { userId },
+            include: [
+                {
+                    model: Spot
+                }
+            ]
+        });
         // const owner = await User.findByPk(req.user.id);
         // const Bookings = await owner.getBookings()
         // res.json({ Bookings });
@@ -150,13 +157,13 @@ router.delete('/:bookingId',
             where: {
                 id: bookingId,
                 userId,
-                spotId,
-                startDate: {
-                    [Op.between]: [startDate, endDate]
-                },
-                endDate: {
-                    [Op.between]: [startDate, endDate]
-                }
+                // // spotId,
+                // startDate: {
+                //     [Op.between]: [startDate, endDate]
+                // },
+                // endDate: {
+                //     [Op.between]: [startDate, endDate]
+                // }
             }
         });
 
