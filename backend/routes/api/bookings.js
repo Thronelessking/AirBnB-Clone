@@ -46,11 +46,11 @@ router.get('/current',
     requireAuth,
     async (req, res, next) => {
         const userId = req.user.id
-        const allBookings = await Booking.findAll({ where: { userId } });
+        const Bookings = await Booking.findAll({ where: { userId } });
         // const owner = await User.findByPk(req.user.id);
         // const Bookings = await owner.getBookings()
         // res.json({ Bookings });
-        res.json(allBookings)
+        res.json({ Bookings })
     }
 );
 
@@ -60,21 +60,41 @@ router.put('/:bookingId',
         const userId = req.user.id;
         const booking = await Booking.findOne({ where: { id: req.params.bookingId } });
         const { Op } = require("sequelize");
-        const passedEnd = await Booking.findAll({
+        const {
+            startDate,
+            endDate
+        } = req.body;
+        const dateStart = new Date(startDate)
+        const dateEnd = new Date(endDate)
+
+        const existingBooking = await Booking.findAll({
             where: {
-
-                spotId: spotId,
-
-                endDate: {
-                    [Op.gte]: endDate
-                }
+                [Op.or]: [
+                    {
+                        startDate
+                    },
+                    {
+                        endDate
+                    }
+                ]
             }
+
         });
+        //const findBookings = await Booking.count();
+        // const passedEnd = await Booking.findAll({
+        //     where: {
+        //         userId,
+        //         endDate: {
+        //             [Op.lte]: endDate,
+        //             [Op.lt]: new Date(),
+        //         }
+        //     }
+        // });
 
         if (!booking) {
             const err = new Error('The specified spot does not exist');
             err.status = 404
-            res.json({
+            res.status(404).json({
                 message: err.message,
                 code: err.status
             })
@@ -84,19 +104,30 @@ router.put('/:bookingId',
             err.errors = "Forbidden";
             err.status = 403;
             return next(err);
-        } else if (passedEnd) {
+        } else if (dateStart >= dateEnd) {
+            const err = Error("endDate cannot be on or before startDate");
+            err.status = 400;
+            err.title = "Validation error";
+            next(err);
+
+        } else if (new Date(endDate) <= new Date() || new Date(startDate) <= new Date()) {
             const err = new Error("Past bookings can't be modified");
             err.status = 403;
             res.status(403).json({
                 message: err.message,
                 statusCode: err.status
             })
-        }
-        else {
-            const {
-                startDate,
-                endDate
-            } = req.body;
+        } else if (existingBooking.length) {
+
+            const err = new Error("Sorry, this spot is already booked for the specified dates");
+            err.status = 403;
+            err.errors;
+            res.status(403).json({
+                message: err.message,
+                statusCode: err.status,
+            });
+        } else {
+
             const updateBooking = await booking.set({
                 startDate,
                 endDate

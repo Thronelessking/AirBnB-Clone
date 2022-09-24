@@ -89,74 +89,46 @@ const validateReview = [
 //     handleValidationErrors
 // ];
 
-const validateBooking = [
-    check('endDate').toDate(),
-    check('startDate').toDate().custom((startDate, { req }) => {
-        const dateStart = new Date(startDate)
-        const dateEnd = new Date(req.body.endDate)
-        if (dateStart >= dateEnd) {
-            throw new Error('endDate cannot be on or before startDate');
-        }
-        return true;
-    }), handleValidationErrors
-];
-
-
 // const validateBooking = [
-//     // check('endDate')
-//     //     .toDate()
-//     //     .isBefore(req.body.startDate)
-//     //     .withMessage('endDate cannot be on or before startDate'),
-
-//     // check('endDate')
-//     //     .custom('endDate' === 'startDate')
-//     //     .withMessage('endDate cannot be on or before startDate'),
-//     // .trim()
-//     //.exists({ checkFalsy: true })
-//     // .custom(value => {
-//     //     const dateStart = new Date(req.body.startDate)
-//     //     const dateEnd = new Date(req.body.endDate)
-//     //     if (dateStart >= dateEnd) {
-//     //         throw new Error(
-//     //             "endDate cannot be on or before startDate"
-//     //         )
-//     //     }
-//     //     return true
-//     // })
-
-//     // handleValidationErrors
-
-//     // check('endDate').custom((endDate, { req }) => {
-//     //     const dateStart = new Date(startDate)
-//     //     const dateEnd = new Date(endDate)
-
-//     //     if (dateStart >= dateEnd) {
-//     //         throw new Error(
-//     //             "endDate cannot be on or before startDate"
-//     //         )
-
-//     //     }
-//     // check('endDate').toDate(req.body.endDate),
-//     // check('startDate').toDate().custom((startDate) => {
-//     //     const dateStart = new Date(startDate)
-//     //     const dateEnd = new Date(endDate)
-//     //     if (dateStart >= dateEnd) {
-//     //         throw new Error('start date must be before end date');
-//     //     }
-//     // }),
-//     // handleValidationErrors
-//     // })
-
 //     check('endDate').toDate(),
 //     check('startDate').toDate().custom((startDate, { req }) => {
 //         const dateStart = new Date(startDate)
 //         const dateEnd = new Date(req.body.endDate)
 //         if (dateStart >= dateEnd) {
-//             throw new Error('start date must be before end date');
+//             throw new Error('endDate cannot be on or before startDate');
 //         }
 //         return true;
-//     }),
+//     }), handleValidationErrors
 // ];
+
+// const validateQuery = [
+//     check('page')
+//         .isInt({ min: 0 })
+//         .withMessage("Page must be greater than or equal to 0"),
+//     check('size')
+//         .isInt({ min: 0 })
+//         .withMessage("Size must be greater than or equal to 0"),
+//     check('minLat')
+//         .minLat('minLat')
+//         .withMessage("Minimum latitude is invalid"),
+//     check('maxLat')
+//         .maxLat()
+//         .withMessage("Maximum latitude is invalid"),
+//     check('minLng')
+//         .minLat()
+//         .withMessage("Minimum longitude is invalid"),
+//     check('maxLng')
+//         .maxLat()
+//         .withMessage("Maximum longitude is invalid"),
+//     check('minPrice')
+//         .minLat()
+//         .withMessage("Maximum price must be greater than or equal to 0"),
+//     check('maxPrice')
+//         .maxLat(90)
+//         .withMessage("Maximum price must be greater than or equal to 0"),
+//     handleValidationErrors
+// ]
+
 /*** 
 ** Get **
 ***/
@@ -196,7 +168,9 @@ router.get('/:spotId/bookings',
 //Get Reviews by Spot Id
 router.get('/:spotId/reviews',
     requireAuth,
+
     async (req, res, next) => {
+        const user = req.user.id;
         const spot = await Spot.findByPk(req.params.spotId);
         if (!spot) {
             const err = new Error('The specified spot does not exist');
@@ -211,8 +185,14 @@ router.get('/:spotId/reviews',
             // })
         } else {
             //const spot = await Spot.findByPk(req.params.spotId);
-            Reviews = await spot.getReviews()
-            res.json({ Reviews })
+            const Reviews = await Review.findAll({
+                where: {
+                    spotId: req.params.spotId,
+                },
+                include: [{ model: User }, { model: Spot }, { model: Image, as: 'ReviewImages' }],
+
+            })
+            res.json({ Reviews, User })
         }
     }
 );
@@ -254,13 +234,16 @@ router.get('/:spotId',
 
 router.get('/',
     requireAuth,
+    // validateQuery,
     async (req, res, next) => {
         let query = {
             where: {},
             include: [],
         };
 
-        const {
+        let {
+            page,
+            size,
             maxLat,
             minLat,
             minLng,
@@ -270,17 +253,28 @@ router.get('/',
         } = req.query;
 
         //let { page, size } = req.query;
-        const page = req.query.page === undefined ? 0 : parseInt(req.query.page);
-        const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
+        // const page = req.query.page === undefined ? 0 : parseInt(req.query.page);
+        // const size = req.query.size === undefined ? 20 : parseInt(req.query.size);
 
-        // if (!page || isNaN(page) || page <= 0) {
-        //     page = 0;
-        // }
+        if (!page || isNaN(page)) {
+            page = 0;
+        } else if (page < 0) {
+            res.status(400);
+            return res.json({
+                errors: [{ page: "Page must be greater than or equal to 0" }],
+            });
+        }
 
-        // if (!size || isNaN(size) || size <= 0) {
-        //     size = 20;
-        // }
+        if (!size || isNaN(size) || size <= 0) {
+            size = 20;
+        }
 
+        if (size > 10) {
+            size = 10;
+        }
+
+        page = Number(page);
+        size = Number(size);
         // if (size > 20) {
         //     size = 20;
         // }
@@ -318,51 +312,31 @@ router.get('/',
 //Create a booking based on a spot id
 router.post('/:spotId/bookings',
     requireAuth,
-    validateBooking,
+    // validateBooking,
     async (req, res, next) => {
         const userId = req.user.id;
         const spotId = req.params.spotId
         const spot = await Spot.findByPk(spotId);
         // const { Op } = require("sequelize");
         const { startDate, endDate } = req.body;
-        // const existingBooking = await Booking.findAll({
-        //     where: {
-        //         userId,
-        //         spotId,
-        //     }
-        // });
-        const allReadyBooked = await Booking.findAll({
+        const dateStart = new Date(startDate)
+        const dateEnd = new Date(endDate)
+
+        const existingBooking = await Booking.findAll({
             where: {
-                //userId,
-                spotId: spotId,
-                startDate: {
-                    [Op.between]: [startDate, endDate]
-                },
-                endDate: {
-                    [Op.between]: [startDate, endDate]
-                }
+                spotId,
+                [Op.or]: [
+                    {
+                        startDate
+                    },
+                    {
+                        endDate
+                    }
+                ]
             }
+
         });
 
-        const bookedAtStart = await Booking.findAll({
-            where: {
-                // userId,
-                spotId: spotId,
-                startDate: {
-                    [Op.gt]: startDate,
-                    [Op.eq]: startDate,
-                },
-            }
-        });
-        const bookedAtEnd = await Booking.findAll({
-            where: {
-                userId,
-                spotId: spotId,
-                endDate: {
-                    [Op.lte]: endDate
-                }
-            }
-        });
 
         // spotId
         // userId
@@ -375,32 +349,40 @@ router.post('/:spotId/bookings',
                 message: err.message,
                 code: err.status
             });
-            // } else if (existingBooking) {
-            //     const err = new Error("User already has a booking for this spot");
-            //     err.status = 403;
-            //     res.status(403).json({
-            //         message: err.message,
-            //         code: err.status
-            //     });
-        } else if (allReadyBooked) {
-            const errors = []
-            if (bookedAtStart) {
-                errors.push("Start date conflicts with an existing booking")
-            }
-            if (bookedAtEnd) {
-                errors.push("End date conflicts with an existing booking")
-            }
+
+        } else if (dateStart >= dateEnd) {
+            const err = Error("endDate cannot be on or before startDate");
+            err.status = 400;
+            err.title = "Validation error";
+            next(err);
+
+
+        } else if (existingBooking.length) {
+            // const errors = [];
+            // const timely = existingBooking.attributes[startDate]
+            // timely = timely.toString()
+            // if (timely) {
+            //     errors.push("working")
+            // }
+            // if (startDate) {
+            //     errors.push(existingBooking.length)
+            // }
+            // console.log(new Date(existingBooking.attributes[startDate]))
+            // for (let i = 0; i < existingBooking.length; i++) {
+            //     let item = existingBooking[i]
+            //     //console.log(item)
+
+            //     // if(item[3] === startDate)
+            // }
+
             const err = new Error("Sorry, this spot is already booked for the specified dates");
-            err.errors = errors;
-            //err.message = "Sorry, this spot is already booked for the specified dates"
             err.status = 403;
+            err.errors;
             res.status(403).json({
                 message: err.message,
                 statusCode: err.status,
-                errors: errors
+                errors
             });
-
-
         } else if (userId === spot.ownerId) {
             const err = new Error('Cannot book your your own listing/spot');
             err.status = 403
@@ -410,16 +392,7 @@ router.post('/:spotId/bookings',
             });
         } else {
 
-            // const dateStart = new Date(startDate)
-            // const dateEnd = new Date(endDate)
-            // if (dateStart >= dateEnd) {
-            //     const err = Error("Validation error");
-            //     err.status = 400;
-            //     err.title = "Validation error";
-            //     next(err);
-            // } else {
-
-            const booking = await Book.create({
+            const booking = await Booking.create({
                 spotId,
                 userId,
                 startDate,
