@@ -138,7 +138,39 @@ router.get('/current',
     requireAuth,
     async (req, res, next) => {
         const owner = await User.findByPk(req.user.id);
-        const Spots = await owner.getSpots()
+        //const Spots = await owner.getSpots()
+        const Spots = await Spot.findAll({
+            where: {
+                ownerId: owner.id
+            },
+            include: [
+                {
+                    model: User,
+                    as: 'Owner'
+                },
+                {
+                    model: Image,
+                    as: 'SpotImages'
+                }
+            ]
+        });
+        let spotList = [];
+        Spots.forEach(spot => {
+            spotList.push(spot.toJSON())
+        });
+
+        spotList.forEach(spot => {
+            spot.SpotImages.forEach(image => {
+                //console.log(owner.id)
+                if (image.previewImage === true) {
+                    spot.previewImage = image.url
+                }
+            })
+            if (!spot.previewImage) {
+                spot.previewImage = "no preview image found"
+            }
+            // delete spot.SpotImages
+        })
         res.json({ Spots });
     }
 );
@@ -284,18 +316,58 @@ router.get('/',
 
         page = Number(page);
         size = Number(size);
-        // if (size > 20) {
-        //     size = 20;
-        // }
-        // if (page) {
 
-        // } else if (size) {
+        const where = {};
 
-        // } else {
+        if (maxLat && maxLat !== ' ') {
+            where.lat = parseFloat(maxLat)
+        } else if (maxLat > 180) {
+            res.status(400);
+            return res.json({
+                errors: [{ message: "Maximum latitude is invalid" }],
+            });
+        }
+        if (minLat && minLat !== ' ') {
+            where.lat = parseFloat(minLat)
+        } else if (minLat < -180) {
+            res.status(400);
+            return res.json({
+                errors: [{ message: "Minimum latitude is invalid" }],
+            });
+        }
+        if (maxLng && maxLng !== ' ') {
+            where.lng = parseFloat(maxLng)
+        } else if (maxLng > 90) {
+            res.status(400);
+            return res.json({
+                errors: [{ message: "Maximum longitude is invalid" }],
+            });
+        }
+        if (minLng && minLng !== ' ') {
+            where.lng = parseFloat(minLng)
+        } else if (minLng < -90) {
+            res.status(400);
+            return res.json({
+                errors: [{ message: "Minimum longitude is invalid" }],
+            });
+        }
+        if (maxPrice && maxPrice !== ' ') {
+            where.price = parseFloat(maxPrice)
+        } else if (maxPrice < 0) {
+            res.status(400);
+            return res.json({
+                errors: [{ message: "Maximum price must be greater than or equal to 0" }],
+            });
+        }
+        if (minPrice && minPrice !== ' ') {
+            where.price = parseFloat(minPrice)
+        } else if (minPrice < 0) {
+            res.status(400);
+            return resres.status(400).json({
+                errors: [{ message: "Minimum price must be greater than or equal to 0" }],
+            });
+        }
 
-        // }
-        // page = Number(page);
-        // size = Number(size);
 
         const Spots = await Spot.findAll({
             where,
@@ -319,7 +391,7 @@ router.get('/',
 
         spotList.forEach(spot => {
             spot.SpotImages.forEach(image => {
-                //console.log(image.previewImage)
+                console.log(image.previewImage)
                 if (image.previewImage === true) {
                     spot.previewImage = image.url
                 }

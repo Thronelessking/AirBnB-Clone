@@ -158,12 +158,15 @@ router.delete('/:bookingId',
                 id: bookingId,
                 userId,
                 // // spotId,
-                // startDate: {
-                //     [Op.between]: [startDate, endDate]
-                // },
-                // endDate: {
-                //     [Op.between]: [startDate, endDate]
-                // }
+                [Op.and]: [{
+                    startDate: {
+                        [Op.gte]: new Date()
+                    },
+                    endDate: {
+                        [Op.lte]: new Date()
+                    }
+                }]
+
             }
         });
 
@@ -180,13 +183,14 @@ router.delete('/:bookingId',
             err.errors = "Forbidden";
             err.status = 403;
             return next(err);
-        } else if (currentlyBooked) {
+        } else if (currentlyBooked.length) {
             const err = new Error("Bookings that have been started can't be deleted");
             err.status = 403;
             res.status(403).json({
                 message: err.message,
                 statusCode: err.status
             })
+            // console.log(currentlyBooked)
         } else {
             await booking.destroy();
             res.json({
