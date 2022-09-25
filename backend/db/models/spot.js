@@ -97,17 +97,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     avgRating: {
       type: DataTypes.FLOAT,
       allowNull: true,
     },
-    previewImage: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
+    // previewImage: {
+    //   type: DataTypes.BOOLEAN,
+    //   allowNull: true,
+    // },
   }, {
     defaultScope: {
       // attributes: {

@@ -29,7 +29,7 @@ module.exports = {
         imageableId: 1
       },
       {
-        previewImage: true,
+        previewImage: false,
         url: "whatanuglyhouse.jpg",
         imageableType: "Spot",
         imageableId: 1

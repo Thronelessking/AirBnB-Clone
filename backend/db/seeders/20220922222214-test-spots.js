@@ -16,7 +16,7 @@ module.exports = {
         description: "Place where web developers are created",
         price: 123,
         avgRating: 3,
-        previewImage: false,
+        // previewImage: false,
       },
       {
         ownerId: 2,
@@ -30,7 +30,7 @@ module.exports = {
         description: "Dreary Derry Baby",
         price: 234,
         avgRating: 3,
-        previewImage: false,
+        // previewImage: false,
       },
       {
         ownerId: 3,
@@ -44,7 +44,7 @@ module.exports = {
         description: "Again this is seed data, grasping hairs",
         price: 456,
         avgRating: 3,
-        previewImage: false,
+        // previewImage: false,
       },
       {
         ownerId: 4,
@@ -58,7 +58,7 @@ module.exports = {
         description: "Place where web developers are created",
         price: 567,
         avgRating: 3,
-        previewImage: false,
+        // previewImage: false,
       },
 
     ], {});
