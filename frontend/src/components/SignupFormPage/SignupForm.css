@@ -1,0 +1,27 @@
+body {
+    background-color: #000;
+    font-family: sans-serif;
+}
+
+div#sign-up h2 {
+    text-align: center;
+    border-bottom: 1px solid rgb(97, 97, 97);
+    padding-bottom: 20px;
+}
+
+div#sign-up {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 500px;
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+div form #sign-up input {
+    margin: 5px 0;
+
+}
+
+div form #sign-up label {}
