@@ -1,22 +1,49 @@
-body {
+/* body {
     background-color: #000;
     font-family: sans-serif;
-}
+} */
 
-div#sign-up h2 {
+div#sign-up h4 {
     text-align: center;
-    border-bottom: 1px solid rgb(97, 97, 97);
-    padding-bottom: 20px;
+    /* border-bottom: 1px solid rgb(97, 97, 97); */
+    padding-bottom: 10px;
 }
 
 div#sign-up {
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(206 206 206);
     border-radius: 10px;
     padding: 10px;
-    max-width: 500px;
+    max-width: 550px;
     margin: 100px auto;
     display: flex;
     flex-direction: column;
+}
+
+/* #sign-up form {
+    width: 100%;
+} */
+
+#sign-up input[type="text"],
+#sign-up input[type="email"],
+#sign-up input[type="password"],
+#sign-up button[type="submit"] {
+    /* margin: 0 10px; */
+    /* padding: 0 20px; */
+    width: 100%;
+}
+
+#sign-up button[type="submit"] {
+    background-color: rgb(238, 30, 96);
+    border: 1px solid rgb(238, 30, 96);
+    border-radius: 5px;
+    padding: 10px 0;
+    color: #fff;
+}
+
+div.line {
+    background-color: aqua;
+    height: 1px;
 }
 
 div form #sign-up input {

@@ -30,15 +30,16 @@ function SignupFormPage() {
 
     return (
         <div className="" id='sign-up'>
-            <h2>Sign-up Form</h2>
+            <h4>Sign-up Form</h4>
+            <div className="line"></div>
             <form onSubmit={handleSubmit}>
 
                 <ul>
                     {errors.map((error, idx) => <li key={idx}>{error}</li>)}
                 </ul>
-                <label>
-                    Email
+                <label for="email">
                     <input
+                        placeHolder="Email"
                         type="text"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -48,6 +49,7 @@ function SignupFormPage() {
                 <label>
                     Username
                     <input
+                        placeHolder="Username"
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
@@ -57,6 +59,7 @@ function SignupFormPage() {
                 <label>
                     Password
                     <input
+                        placeHolder="Password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -66,12 +69,14 @@ function SignupFormPage() {
                 <label>
                     Confirm Password
                     <input
+                        placeHolder="Confirm Password"
                         type="password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                     />
                 </label>
+                <small>We’ll call or text you to confirm your number. Standard message and data rates apply. <b><a href="">Privacy Policy</a></b></small>
                 <button type="submit">Sign Up</button>
             </form>
         </div>
