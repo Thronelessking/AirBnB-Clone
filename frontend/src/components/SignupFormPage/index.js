@@ -76,7 +76,7 @@ function SignupFormPage() {
                         required
                     />
                 </label>
-                <small>We’ll call or text you to confirm your number. Standard message and data rates apply. <b><a href="">Privacy Policy</a></b></small>
+                <small>We’ll call or text you to confirm your number. Standard message and data rates apply. <b><a href="#">Privacy Policy</a></b></small>
                 <button type="submit">Sign Up</button>
             </form>
         </div>
