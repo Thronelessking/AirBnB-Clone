@@ -1,0 +1,31 @@
+#spot-container {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    margin: 0 auto;
+    font-family: 'Nunito', sans-serif;
+}
+
+#spot-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.spot-post {
+    flex-direction: row;
+}
+
+i.fa-heart {
+    color: #fff;
+    font-size: 20px;
+    padding: 8px;
+}
+
+.spot-preview-image {
+    background-color: #000;
+    /* width: 100%; */
+    /* height: 100%; */
+    height: 200px;
+    width: 200px;
+    border-radius: 15px;
+}

@@ -13,6 +13,7 @@ function Navigation({ isLoaded }) {
     if (sessionUser) {
         sessionLinks = (
             <ProfileButton user={sessionUser} />
+
         );
     } else {
         sessionLinks = (
@@ -24,12 +25,33 @@ function Navigation({ isLoaded }) {
     }
 
     return (
-        <ul>
-            <li>
-                <NavLink exact to="/">Home</NavLink>
-                {isLoaded && sessionLinks}
-            </li>
-        </ul>
+        // <ul>
+        //     <li>
+        //         <NavLink exact to="/">Home</NavLink>
+        //         {isLoaded && sessionLinks}
+        //     </li>
+        // </ul>
+        <div id="header-wrapper">
+            <header>
+                <div className="container">
+                    <div className="logo">
+                        <NavLink exact to="/"><img src="../../assets/img/airbnb.svg" alt="Airbnb" /></NavLink>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div>
+                        <nav>
+                            <ul>
+                                <li>
+                                    {isLoaded && sessionLinks}
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+        </div>
     )
 
 }

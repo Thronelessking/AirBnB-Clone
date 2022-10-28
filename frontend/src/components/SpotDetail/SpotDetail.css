@@ -1,0 +1,29 @@
+.spot-detail {
+    font-family: 'Nunito', sans-serif;
+    max-width: 1175px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.spot-detail .spot-images {
+    display: flex;
+    justify-content: space-between;
+}
+
+.spot-detail .main-preview-img img {
+    width: 100%;
+}
+
+.spot-detail .four-square-home,
+.spot-detail .main-preview-img {
+    width: 600px;
+    max-width: 100%;
+}
+
+.spot-detail .four-square-home .hdi {
+    width: 300px;
+}
+
+.spot-detail .four-square-home .hdi img {
+    width: 100%;
+}
