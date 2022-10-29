@@ -24,7 +24,7 @@ const SpotList = () => {
             {allSpots.map(({ id, name, city, state, price, rating, previewImage }) => (
                 // <p key={id}>{name}</p>
                 // <a href="#">
-                <Link to={`/spots/${id}`}>
+                <Link to={`/spots/${id}`} target="_blank">
                     <div className="spot-post">
                         <div className="spot-preview-image">
                             <i className="fa-regular fa-heart"></i>

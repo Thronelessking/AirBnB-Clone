@@ -1,29 +1,96 @@
-.spot-detail {
+.spot-container {
     font-family: 'Nunito', sans-serif;
-    max-width: 1175px;
+    max-width: 1024px;
     width: 100%;
     margin: 0 auto;
 }
 
-.spot-detail .spot-images {
+/* .spot-images {
     display: flex;
-    justify-content: space-between;
 }
 
-.spot-detail .main-preview-img img {
+.spot-details {
+    display: flex;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.spot-container .spot-images {
+    display: flex;
+    justify-content: space-between;
+} */
+
+.spot-images {
+    display: grid;
+    gap: 10px;
+    grid-template-areas:
+        'a a b c'
+        'a a d e';
+    grid-template-rows: 162px 162px;
+    grid-template-columns: 245px 245px 245px 245px;
+}
+
+.main-preview-img {
+    grid-area: a;
+}
+
+.four-square-home-1 {
+    grid-area: b;
+}
+
+.four-square-home-2 {
+    grid-area: c;
+}
+
+.four-square-home-3 {
+    grid-area: d;
+}
+
+.four-square-home-4 {
+    grid-area: e;
+}
+
+.four-square-home-1 img,
+.four-square-home-2 img,
+.four-square-home-3 img,
+.four-square-home-4 img {
     width: 100%;
 }
 
-.spot-detail .four-square-home,
-.spot-detail .main-preview-img {
+.spot-container .main-preview-img img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.four-square-home-2 img {
+    border-top-right-radius: 10px;
+}
+
+.four-square-home-4 img {
+    border-bottom-right-radius: 10px;
+}
+
+/* 
+
+.spot-container .four-square-home,
+.spot-container .main-preview-img {
     width: 600px;
     max-width: 100%;
 }
 
-.spot-detail .four-square-home .hdi {
+.spot-container .four-square-home .hdi {
     width: 300px;
 }
 
-.spot-detail .four-square-home .hdi img {
+.spot-container .four-square-home .hdi img {
     width: 100%;
+} */
+
+/* Booking Form */
+.booking-form-container {
+    border: 1px solid rgb(212, 212, 212);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px rgb(186, 186, 186);
 }
