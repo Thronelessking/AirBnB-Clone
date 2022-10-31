@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import './CreateSpotForm.css';
 
 const CreateSpotForm = () => {
+    const dispatch = useDispatch();
 
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
@@ -37,14 +38,38 @@ const CreateSpotForm = () => {
         e.preventDefault();
 
         const payload = {
-
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
         };
 
     };
 
+    let createdSpot;
+
+    try {
+        // createdSpot = await dispatch((payload))
+    } catch (error) {
+
+    }
+
     return (
         <div className='booking-form'>
             <form className="create-booking-form" onSubmit={handleSubmit}>
+
+                <input
+                    type="text"
+                    placeholder="Name"
+                    required
+                    value={name}
+                    onChange={updateName}
+                />
 
                 <input
                     type="text"
@@ -58,35 +83,53 @@ const CreateSpotForm = () => {
 
                 <input
                     type="text"
+                    placeholder="Price"
+                    required
+                    value={price}
+                    onChange={updatePrice}
+                />
+
+                <input
+                    type="text"
                     placeholder="City"
+                    required
+                    value={city}
+                    onChange={updateCity}
                 />
 
                 <input
                     type="text"
                     placeholder="State"
+                    required
+                    value={state}
+                    onChange={updateState}
                 />
 
                 <input
                     type="text"
                     placeholder="Country"
+                    required
+                    value={country}
+                    onChange={updateCountry}
                 />
 
                 <input
                     type="text"
-                    placeholder="Country"
+                    placeholder="Latitude"
+                    required
+                    value={lat}
+                    onChange={updateLat}
                 />
 
                 <input
                     type="text"
-                    placeholder="Country"
+                    placeholder="Longitude"
+                    required
+                    value={lng}
+                    onChange={updateLng}
                 />
 
-                <input
-                    type="text"
-                    placeholder="Country"
-                />
-
-
+                <button type="submit">Create Spot</button>
             </form>
         </div>
     );

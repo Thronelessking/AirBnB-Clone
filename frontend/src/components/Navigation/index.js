@@ -20,6 +20,7 @@ function Navigation({ isLoaded }) {
             <>
                 <NavLink to="/login">Log In</NavLink>
                 <NavLink to="/signup">Sign Up</NavLink>
+                <NavLink to="/new">New</NavLink>
             </>
         );
     }
@@ -35,7 +36,7 @@ function Navigation({ isLoaded }) {
             <header>
                 <div className="container">
                     <div className="logo">
-                        <NavLink exact to="/"><img src="../../assets/img/airbnb.svg" alt="Airbnb" /></NavLink>
+                        <NavLink exact to="/"><img src="../../assets/img/airbnb_logo.svg.png" alt="Airbnb" /></NavLink>
                     </div>
                     <div>
 

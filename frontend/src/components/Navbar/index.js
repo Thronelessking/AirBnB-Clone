@@ -1,6 +1,6 @@
 <header>
     <div>
-        <NavLink exact to="/"><img src="../../assets/img/airbnb.svg" alt="Airbnb" /></NavLink>
+        <NavLink exact to="/"><img src="../../assets/img/airbnb_logo.svg.png" alt="Airbnb" /></NavLink>
     </div>
     <div>
 

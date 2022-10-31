@@ -13,7 +13,7 @@ const SpotList = () => {
         return state.spots;
     });
     const allSpots = Object.values(spotList)
-    console.log(spotList);
+    // console.log(spotList);
     useEffect(() => {
         dispatch(getAllSpots());
     }, [dispatch]);

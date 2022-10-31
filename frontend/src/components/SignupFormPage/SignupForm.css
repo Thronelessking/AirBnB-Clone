@@ -1,23 +1,25 @@
-/* body {
-    background-color: #000;
-    font-family: sans-serif;
-} */
+body {
+    font-family: 'Nunito', sans-serif;
+}
 
 div#sign-up h4 {
     text-align: center;
-    /* border-bottom: 1px solid rgb(97, 97, 97); */
-    padding-bottom: 10px;
+    padding: 0;
+    font-weight: 700;
 }
 
 div#sign-up {
     background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(206 206 206);
+    border: 1px solid rgb(184, 184, 184);
     border-radius: 10px;
     padding: 10px;
     max-width: 550px;
     margin: 100px auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* box-sizing: border-box; */
 }
 
 /* #sign-up form {
@@ -28,9 +30,9 @@ div#sign-up {
 #sign-up input[type="email"],
 #sign-up input[type="password"],
 #sign-up button[type="submit"] {
-    /* margin: 0 10px; */
-    /* padding: 0 20px; */
     width: 100%;
+    box-sizing: border-box;
+
 }
 
 #sign-up button[type="submit"] {
@@ -39,16 +41,22 @@ div#sign-up {
     border-radius: 5px;
     padding: 10px 0;
     color: #fff;
+    padding: 30px;
 }
 
-div.line {
-    background-color: aqua;
-    height: 1px;
+div.form-title {
+    border-bottom: 1px solid rgb(206 206 206);
 }
 
-div form #sign-up input {
-    margin: 5px 0;
-
+div form .form-input {
+    /* margin: 5px 0; */
+    width: 100%;
+    padding: 10px;
 }
+
+/* div.form-input {
+    border-left: 1px solid rgb(206 206 206);
+    border-right: 1px solid rgb(206 206 206);
+} */
 
 /* div form #sign-up label {} */
