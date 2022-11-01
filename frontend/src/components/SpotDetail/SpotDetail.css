@@ -10,6 +10,32 @@
     border-bottom: 1px solid rgb(185, 185, 185);
 }
 
+.booking-form-container {
+    /* padding: 20px;
+    margin: 20px; */
+}
+
+.spot-details {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 50px 0;
+}
+
+.spot-info {
+    grid-column: 1 / span 4
+}
+
+.booking-form-container {
+    grid-column: 5 / span 2
+}
+
+/* .spot-booking-container ul {
+    display: flex;
+    grid-column-start: 4;
+} */
+
+.spot-booking-container ul li {}
+
 /* .spot-images {
     display: flex;
 }
@@ -93,7 +119,7 @@
 } */
 
 /* Booking Form */
-.booking-form-container {
+.spot-booking-form-container {
     border: 1px solid rgb(212, 212, 212);
     padding: 15px;
     border-radius: 10px;

@@ -3,12 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOneSpot } from '../../store/spot';
 // import { getAllReviewsForSpot } from '../../store/reviews';
+// import * as sessionActions from '../../store/session';
+import { Redirect } from 'react-router-dom';
 import ReviewBrowser from '../ReviewBrowser'
 import CreateBookingForm from '../CreateBookingForm';
+
 import './SpotDetail.css';
 
 const SpotDetail = () => {
     //
+    const sessionUser = useSelector(state => state.session.user);
+    console.log("this is it " + sessionUser)
+    // if (session.user.id === spot.Owner.id) {
+    //     return true;
+    // }
     const { spotId } = useParams();
     // console.log(spotId)
     const spot = useSelector(state => state.spots[spotId]);
@@ -59,23 +67,22 @@ const SpotDetail = () => {
             </div>
             <div className='spot-details'>
                 <div className='spot-info'>
-                    <h3>{spot.name} hosted by {spot.Owner.firstName}</h3>
+                    <h2>{spot.name} hosted by {spot.Owner.firstName}</h2>
                 </div>
-                <div>
-                    <div className='booking-form-container'>
-                        <div>
-                            <h2>${spot.price} night</h2>
-                        </div>
-                        <div>
-                            <ul>
-                                <li>rating</li>
-                                <li><a href="#">reviews</a></li>
-                            </ul>
-                        </div>
-                        <CreateBookingForm />
-                        <a href='#'>Report this listing</a>
+
+                <div className='spot-booking-form-container'>
+                    <div className="spot-booking-container">
+                        <h3>${spot.price} night</h3>
+
+                        <ul>
+                            <li>rating</li>
+                            <li><a href="#">reviews</a></li>
+                        </ul>
                     </div>
+                    <CreateBookingForm />
+                    <a href='#'>Report this listing</a>
                 </div>
+
             </div>
 
             <ReviewBrowser />
