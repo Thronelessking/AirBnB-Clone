@@ -60,37 +60,42 @@ export const getOneSpot = (id) => async dispatch => {
 };
 //Post New Spot = '/api/spots'
 export const createNewSpot = (spot) => async dispatch => {
-    try {
-        const response = await csrfFetch('/api/spots', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(spot),
-        });
+    // try {
+    const response = await csrfFetch('/api/spots', {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(spot),
+    });
 
-        if (!response.ok) {
-            let error;
-            if (response.status === 422) {
-                error = await response.json();
-                throw new Error(error.errors, response.statusText);
-            } else {
-                let errorJSON;
-                error = await response.text();
-                try {
+    const data = await response.json();
+    dispatch(getOneSpot(data.id))
+    console.log(response)
+    return response;
 
-                    errorJSON = JSON.parse(error);
-                } catch {
-                    throw new Error(error);
-                }
-                throw new Error(`${errorJSON.title}: ${errorJSON.message}`);
-            }
-        };
+    // if (!response.ok) {
+    //     let error;
+    //     if (response.status === 422) {
+    //         error = await response.json();
+    //         throw new Error(error.errors, response.statusText);
+    //     } else {
+    //         let errorJSON;
+    //         error = await response.text();
+    //         try {
+
+    //             errorJSON = JSON.parse(error);
+    //         } catch {
+    //             throw new Error(error);
+    //         }
+    //         throw new Error(`${errorJSON.title}: ${errorJSON.message}`);
+    //     }
+    // };
 
 
-    } catch (error) {
-        throw new Error();
-    }
+    // } catch (error) {
+    //     throw new Error();
+    // }
 };
 // export const
 // //Edit/Put a Spot = `/api/spots/${id}`
@@ -145,7 +150,7 @@ const spotReducer = (state = initialState, action) => {
             newState[action.spot.id] = action.spot
             return newState
         case DELETE_SPOT:
-            newState = { ...state };
+            // newState = { ...state };
             delete newState[action.id];
             return newState
         default:

@@ -12,19 +12,19 @@ div#sign-up {
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(184, 184, 184);
     border-radius: 10px;
-    padding: 10px;
+    /* padding: 10px; */
     max-width: 550px;
     margin: 100px auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
     /* box-sizing: border-box; */
 }
 
-/* #sign-up form {
+#sign-up form {
     width: 100%;
-} */
+}
 
 #sign-up input[type="text"],
 #sign-up input[type="email"],
@@ -32,7 +32,6 @@ div#sign-up {
 #sign-up button[type="submit"] {
     width: 100%;
     box-sizing: border-box;
-
 }
 
 #sign-up button[type="submit"] {
