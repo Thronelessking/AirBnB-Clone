@@ -35,13 +35,13 @@ function Navigation({ isLoaded }) {
         <div id="header-wrapper">
             <header>
                 <div className="container">
-                    <div className="logo">
+                    <div className="logo nav-left">
                         <NavLink exact to="/"><img src="../../assets/img/airbnb_logo.svg.png" alt="Airbnb" /></NavLink>
                     </div>
-                    <div>
+                    <div className="nav-center">
 
                     </div>
-                    <div>
+                    <div className="nav-right">
                         <nav>
                             <ul>
                                 <li>

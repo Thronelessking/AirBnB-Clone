@@ -36,6 +36,9 @@ function App() {
           <Route exact path="/new">
             <CreateSpotForm />
           </Route>
+          <Route path="/">
+
+          </Route>
         </Switch>
       )}
     </>

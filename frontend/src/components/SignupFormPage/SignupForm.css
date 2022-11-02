@@ -2,7 +2,7 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-div#sign-up h4 {
+/* div#sign-up h4 {
     text-align: center;
     padding: 0;
     font-weight: 700;
@@ -12,14 +12,10 @@ div#sign-up {
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(184, 184, 184);
     border-radius: 10px;
-    /* padding: 10px; */
     max-width: 550px;
     margin: 100px auto;
     display: flex;
     flex-direction: column;
-    /* align-items: center;
-    justify-content: center; */
-    /* box-sizing: border-box; */
 }
 
 #sign-up form {
@@ -48,10 +44,9 @@ div.form-title {
 }
 
 div form .form-input {
-    /* margin: 5px 0; */
     width: 100%;
     padding: 10px;
-}
+} */
 
 /* div.form-input {
     border-left: 1px solid rgb(206 206 206);
@@ -59,3 +54,113 @@ div form .form-input {
 } */
 
 /* div form #sign-up label {} */
+
+.user-form-container {
+    border: 1px solid rgb(150, 150, 150);
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 0;
+}
+
+/* form heading css */
+.user-form-container .form-header {
+    border-bottom: 1px solid rgb(206 206 206);
+}
+
+.user-form-container .form-header h4 {
+    text-align: center;
+    font-weight: 700;
+}
+
+/* form body css */
+.form-input-container {
+    border: 1px solid rgb(206 206 206);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.user-form-container .form-body,
+.user-form-container .form-footer {
+    padding: 20px 40px;
+}
+
+.user-form-container input[type="text"],
+.user-form-container input[type="email"],
+.user-form-container input[type="password"],
+.user-form-container button[type="submit"],
+.user-form-container textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid rgb(157, 157, 157);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    margin-bottom: 1px;
+}
+
+.user-form-container input[type="text"]:focus,
+.user-form-container input[type="email"]:focus,
+.user-form-container input[type="password"]:focus,
+.user-form-container button[type="submit"]:focus,
+.user-form-container textarea:focus {
+    outline-color: rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+.user-form-container input[type="text"],
+.user-form-container input[type="email"],
+.user-form-container input[type="password"],
+.user-form-container button[type="submit"] {
+    padding: 20px 10px;
+}
+
+.user-form-container textarea {
+    padding: 20px 10px;
+    resize: none;
+}
+
+.user-form-container button[type="submit"] {
+    background-color: rgb(238, 30, 96);
+    border: 1px solid rgb(238, 30, 96);
+    border-radius: 10px;
+    padding: 10px 0;
+    color: #fff;
+    padding: 20px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+
+
+.form-top {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.form-bottom {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.create-user-form {
+    padding: 20px 30px;
+}
+
+
+
+.errors-handling {
+    text-align: center;
+    padding: 0;
+
+}
+
+.errors-handling li {
+    list-style: none;
+    color: rgb(210, 5, 5);
+    background-color: rgb(250, 215, 215);
+    border: 1px solid rgb(250, 215, 215);
+    border-radius: 5px;
+    margin: 10px 30px;
+    padding: 10px;
+}
