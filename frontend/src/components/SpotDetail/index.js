@@ -13,7 +13,7 @@ import './SpotDetail.css';
 const SpotDetail = () => {
     //
     const sessionUser = useSelector(state => state.session.user);
-    console.log("this is it " + sessionUser)
+    console.log("this is it " + sessionUser.id)
     // if (session.user.id === spot.Owner.id) {
     //     return true;
     // }
@@ -43,6 +43,8 @@ const SpotDetail = () => {
     if (!spot) {
         return null;
     }
+
+
 
     return (
         <div className='spot-container'>

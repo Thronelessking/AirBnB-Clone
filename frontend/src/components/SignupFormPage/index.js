@@ -39,7 +39,7 @@ function SignupFormPage() {
             <form onSubmit={handleSubmit} className="create-user-form">
                 <h2>Welcome to Airbnb</h2>
                 <ul className='errors-handling'>
-                    {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+                    {errors.map((error, idx) => <li key={idx}><i class="fa-solid fa-circle-exclamation"></i> {error}</li>)}
                 </ul>
                 <div className="form-input-container">
                     <label>

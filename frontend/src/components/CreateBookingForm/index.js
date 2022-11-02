@@ -47,14 +47,23 @@ const CreateBookingForm = () => {
         <div className='booking-form'>
             <form>
                 <input
-                    type="number"
-                    placeholder="Number"
+                    type="date"
+                    placeholder="Start Date"
                     min="1"
                     required
                 />
+                <input
+                    type="date"
+                    placeholder="Start Date"
+                    min="1"
+                    required
+                />
+                <select>
+
+                </select>
 
                 {/* <ErrorMessage label={"Number"} message={errorMessages.number} /> */}
-
+                <button type="submit">Sign Up</button>
             </form>
         </div>
     );
