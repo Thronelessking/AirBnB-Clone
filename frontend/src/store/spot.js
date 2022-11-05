@@ -20,7 +20,7 @@ const addOneSpot = (spot) => ({
     spot
 });
 
-export const deleteSpotById = (id) => {
+export const deleteSpot = (id) => {
     return {
         type: DELETE_SPOT,
         id
@@ -32,6 +32,11 @@ export const createSpot = (spot) => {
         type: CREATE_SPOT,
         spot
     }
+}
+
+
+export const spotById = (id) => (state) => {
+    return state.spots[id]
 }
 
 
@@ -70,37 +75,42 @@ export const createNewSpot = (spot) => async dispatch => {
     });
 
     const data = await response.json();
-    dispatch(getOneSpot(data.id))
-    console.log(response)
+    dispatch(addOneSpot(data))
+    console.log(response, "response")
+    if (response.ok) return data
     return response;
-
-    // if (!response.ok) {
-    //     let error;
-    //     if (response.status === 422) {
-    //         error = await response.json();
-    //         throw new Error(error.errors, response.statusText);
-    //     } else {
-    //         let errorJSON;
-    //         error = await response.text();
-    //         try {
-
-    //             errorJSON = JSON.parse(error);
-    //         } catch {
-    //             throw new Error(error);
-    //         }
-    //         throw new Error(`${errorJSON.title}: ${errorJSON.message}`);
-    //     }
-    // };
-
-
-    // } catch (error) {
-    //     throw new Error();
-    // }
 };
+
 // export const
 // //Edit/Put a Spot = `/api/spots/${id}`
-// //Delete a Spot = `/api/spots/${id}`
+export const updateSpotById = (id) => async dispatch => {
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id),
+    });
 
+    const spot = await response.json();
+    dispatch(addOneSpot(spot))
+    return spot;
+};
+
+// //Delete a Spot = `/api/spots/${id}`
+export const deleteSpotById = (id) => async dispatch => {
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    dispatch(deleteSpot(data.id))
+    console.log(response)
+    return response;
+};
 
 
 
@@ -128,24 +138,8 @@ const spotReducer = (state = initialState, action) => {
             // }
         };
         case ADD_OR_UPDATE_SPOT:
-            // action.spots.forEach((spot) => (newState[spot.id] = spot));
-            // return newState;
-            // if (!state[action.spot.id]) {
-            //     newState = {
-            //         [action.spot.id]: action.spot,
-            //     }
-            //     console.log("data:" + newState.spot)
-            //     const spotList = newState.Spots.map((id) => newState[id]);
-            //     spotList.push(action.spot);
-            //     newState = spotList;
-            //     return newState;
-            // }
-            return {
-                [action.spot.id]: {
-                    ...state[action.spot.id],
-                    ...action.spot,
-                },
-            };
+            newState[action.spot.id] = action.spot
+            return newState
         case CREATE_SPOT:
             newState[action.spot.id] = action.spot
             return newState

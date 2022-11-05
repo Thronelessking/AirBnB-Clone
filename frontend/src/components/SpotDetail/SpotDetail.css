@@ -25,16 +25,22 @@
     grid-column: 1 / span 4
 }
 
-.booking-form-container {
+.spot-booking-form-container {
     grid-column: 5 / span 2
 }
 
-/* .spot-booking-container ul {
+.spot-booking-container {
     display: flex;
-    grid-column-start: 4;
-} */
+    justify-content: space-between;
+    /* padding-left: 0px; */
+    padding: 10px;
+}
 
-.spot-booking-container ul li {}
+.spot-booking-container ul li {
+    align-items: center;
+    text-decoration: none;
+    list-style: none;
+}
 
 /* .spot-images {
     display: flex;

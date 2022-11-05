@@ -1,25 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOneSpot } from '../../store/spot';
+import { deleteSpotById } from '../../store/spot';
+import { getAllReviewsForSpot } from '../../store/reviews';
 // import { getAllReviewsForSpot } from '../../store/reviews';
 // import * as sessionActions from '../../store/session';
-import { Redirect } from 'react-router-dom';
 import ReviewBrowser from '../ReviewBrowser'
 import CreateBookingForm from '../CreateBookingForm';
 
 import './SpotDetail.css';
+import BookingsList from '../BookingBrowser';
 
-const SpotDetail = () => {
-    //
+const SpotDetail = ({ spot }) => {
+
     const sessionUser = useSelector(state => state.session.user);
-    console.log("this is it " + sessionUser.id)
-    // if (session.user.id === spot.Owner.id) {
-    //     return true;
-    // }
+
     const { spotId } = useParams();
-    // console.log(spotId)
-    const spot = useSelector(state => state.spots[spotId]);
+    const history = useHistory();
+    spot = useSelector(state => state.spots[spotId]);
+
     // const reviews = useSelector(state => state.reviews[spotId]);
 
     // const spot = useSelector(state => {
@@ -34,6 +34,7 @@ const SpotDetail = () => {
     //useEffect
     useEffect(() => {
         dispatch(getOneSpot(spotId));
+        // dispatch(deleteSpotById(spotId))
     }, [dispatch, spotId]);
 
     // useEffect(() => {
@@ -43,11 +44,29 @@ const SpotDetail = () => {
     if (!spot) {
         return null;
     }
+    // function userPermissions(){
 
+    // }
+    const deleteSpot = (e) => {
+        e.preventDefault();
+
+        dispatch(deleteSpotById(spotId))
+
+        history.push("/spots")
+    };
 
 
     return (
         <div className='spot-container'>
+            {
+                sessionUser.id === spot.Owner.id &&
+                <div className='user-permissions'>
+                    <button
+                        type='submit'
+                        onClick={deleteSpot}
+                    >Delete Spot</button>
+                </div>
+            }
             <div className='spot-images'>
                 <div className='main-preview-img'>
                     <img src='../assets/img/main-house-preview-image.jpg' alt='Main Image'></img>
@@ -70,29 +89,32 @@ const SpotDetail = () => {
             <div className='spot-details'>
                 <div className='spot-info'>
                     <h2>{spot.name} hosted by {spot.Owner.firstName}</h2>
+                    <p>{spot.description}</p>
                 </div>
 
                 <div className='spot-booking-form-container'>
                     <div className="spot-booking-container">
                         <h3>${spot.price} night</h3>
-
-                        <ul>
+                        <h3><i className="fa-solid fa-star"></i> {spot.avgRating} | {spot.Reviews?.length}</h3>
+                        {/* <ul>
                             <li>rating</li>
                             <li><a href="#">reviews</a></li>
-                        </ul>
+                        </ul> */}
                     </div>
-                    <CreateBookingForm />
-                    <a href='#'>Report this listing</a>
+                    <CreateBookingForm spotId={spot.id} />
+                    {/* <a href='#'>Report this listing</a> */}
                 </div>
 
             </div>
 
-            <ReviewBrowser />
+            <ReviewBrowser spotId={spot.id} />
+            <BookingsList spotId={spot.id} />
             <div className='google-maps'>
                 <h3>Where you'll be</h3>
                 <div></div>
                 <div className='spot-description'>
                     <h3>{spot.city}, {spot.state}, {spot.country}</h3>
+
                 </div>
             </div>
 

@@ -44,6 +44,13 @@ module.exports = (sequelize, DataTypes) => {
         if (this.startDate >= this.endDate) {
           throw new Error("endDate cannot be on or before startDate", { status: 404 });
         }
+      },
+      beforeCurrentDate() {
+        let currentDate = new Date().toJSON().slice(0, 10);
+        if (this.startDate <= currentDate) {
+          throw new Error("startDate cannot be before today", { status: 404 });
+
+        }
       }
     },
     modelName: 'Booking',

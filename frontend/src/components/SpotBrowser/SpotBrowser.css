@@ -1,7 +1,9 @@
 #spot-container {
     max-width: 1200px;
     width: 100%;
-    display: flex;
+    /* display: flex; */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
     margin: 0 auto;
     font-family: 'Nunito', sans-serif;
 }
@@ -13,6 +15,7 @@
 
 .spot-post {
     flex-direction: row;
+
 }
 
 i.fa-heart {

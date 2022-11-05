@@ -1,0 +1,69 @@
+.booking-form {
+    width: 100%;
+}
+
+.book-experience {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.date-input {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid rgb(157, 157, 157);
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    margin-bottom: 1px;
+    padding: 20px 10px;
+}
+
+.booking-form button {
+    margin-top: 10px;
+    background-color: rgb(238, 30, 96);
+    border: 1px solid rgb(238, 30, 96);
+    border-radius: 10px;
+    padding: 10px 0;
+    color: #fff;
+    padding: 20px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.form-top {
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.form-bottom {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.errors-handling {
+    text-align: center;
+    padding: 0;
+
+}
+
+.errors-handling li {
+    list-style: none;
+    color: rgb(210, 5, 5);
+    background-color: rgb(250, 215, 215);
+    border: 1px solid rgb(250, 215, 215);
+    border-radius: 5px;
+    margin: 10px 30px;
+    padding: 10px;
+}
+
+.form-input-container {
+    border: 1px solid rgb(206 206 206);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.date-input:focus {
+    outline-color: rgb(0, 0, 0);
+    border-radius: 10px;
+}

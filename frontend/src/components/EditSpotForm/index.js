@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { createNewSpot } from '../../store/spot';
-import './CreateSpotForm.css';
+import { useHistory, useParams } from 'react-router-dom';
+import { updateSpotById } from '../../store/spot';
+import './EditSpotForm.css';
 
-const CreateSpotForm = () => {
+const EditSpotForm = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const { spotId } = useParams();
+    const spot = useSelector(spotById(spotId))
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
@@ -67,24 +68,21 @@ const CreateSpotForm = () => {
             price
         };
 
-        let res = dispatch(createNewSpot(spot))
+        return dispatch(updateSpotById(spot))
             .catch(async (res) => {
                 const data = await res.json();
-                console.log(data)
                 if (data && data.errors) setErrors(data.errors);
-
-            })
-        console.log(res)
-        // .then(async (res) => {
-        //     const data = await res.json();
-        //     console.log(data)
-        // })
-
-        // const createdSpot = await res.json()
-        // console.log(createdSpot)
-        history.push(`/spots/${res.id}`);
+            });
 
     };
+
+    // let createdSpot;
+
+    // try {
+    //     // createdSpot = await dispatch((payload))
+    // } catch (error) {
+
+    // }
 
     return (
         <div className='booking-form-container'>
@@ -171,10 +169,10 @@ const CreateSpotForm = () => {
                         onChange={updateDescription}
                     ></textarea>
                 </div>
-                <button type="submit">Create Spot</button>
+                <button type="submit">Edit Spot</button>
             </form >
         </div >
     );
 };
 
-export default CreateSpotForm;
+export default EditSpotForm;

@@ -6,13 +6,18 @@ import { getAllSpots } from "../../store/spot";
 import './SpotBrowser.css';
 
 const SpotList = () => {
+    const spots = [];
     // const [spots, setSpots] = useState("")
     const dispatch = useDispatch();
     // const { id } = useParams();
     const spotList = useSelector(state => {
         return state.spots;
     });
-    const allSpots = Object.values(spotList)
+
+    for (const key in spotList) {
+        spots.push(spotList[key])
+    }
+    // const allSpots = Object.values(spotList)
     // console.log(spotList);
     useEffect(() => {
         dispatch(getAllSpots());
@@ -22,23 +27,25 @@ const SpotList = () => {
     return (
         <div id="spot-container">
             {/* <h1>Spots</h1> */}
-            {allSpots.map(({ id, name, city, state, price, rating, previewImage }) => (
+            {spots.map((spot) => (
                 // <p key={id}>{name}</p>
                 // <a href="#">
-                <Link key={id} to={`/spots/${id}`} target="_blank">
+                <Link key={spot.id} to={`/spots/${spot.id}`} target="_blank">
                     <div className="spot-post">
                         <div className="spot-preview-image">
                             <i className="fa-regular fa-heart"></i>
+
                             <img src="#" alt="" />
                         </div>
                         <img src="#" alt="" />
                         <div className="city-rating-container">
-                            <p className="location">{state}, {city}</p>
-                            <p className="rating">{rating}</p>
+                            <h1>{spot.id}</h1>
+                            <p className="location">{spot.state}, {spot.city}</p>
+                            <p className="rating">{spot.avgRating}</p>
                         </div>
                         <p>Distance</p>
                         <p>Booking</p>
-                        <p>${price} night</p>
+                        <p>${spot.price} night</p>
                     </div>
                 </Link>
                 // </a>
