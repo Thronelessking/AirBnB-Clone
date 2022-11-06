@@ -803,6 +803,7 @@ router.post('/',
         // } else if (!description) {
         // } else if (!price) {
         // } else {
+        const user = await User.findByPk(userId)
         const spot = await Spot.create({ ownerId: userId, address, city, state, country, lat, lng, name, description, price });
         // //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
         res.json(spot);
