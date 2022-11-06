@@ -11,3 +11,24 @@
     width: 100%;
     border-radius: 50px;
 }
+
+.review-display .reviewer-details {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.reviewer-details .user-profile-img {
+    padding-right: 20px;
+}
+
+.review-display .reviewer-message p {
+    font-size: 22px;
+}
+
+.review-display .users-review-container h3,
+.review-display .users-review-container p {
+    margin: 0;
+}

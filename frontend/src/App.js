@@ -8,6 +8,8 @@ import Navigation from './components/Navigation';
 import SpotList from './components/SpotBrowser';
 import SpotDetail from './components/SpotDetail';
 import CreateSpotForm from './components/CreateSpotForm';
+import PageNotFound from './components/PageNotFound';
+import Footer from './components/Footer';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,11 +38,12 @@ function App() {
           <Route exact path="/new">
             <CreateSpotForm />
           </Route>
-          <Route path="/">
-
+          <Route path="*">
+            <PageNotFound />
           </Route>
         </Switch>
       )}
+      <Footer />
     </>
   );
 }

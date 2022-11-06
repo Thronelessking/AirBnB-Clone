@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { createNewSpot } from '../../store/spot';
 import './CreateSpotForm.css';
 
-const CreateSpotForm = () => {
+const CreateSpotForm = ({ spot }) => {
+    const sessionUser = useSelector(state => state.session.user);
     const dispatch = useDispatch();
     const history = useHistory();
     const [address, setAddress] = useState("");
@@ -44,9 +45,9 @@ const CreateSpotForm = () => {
     }
 
 
-    // useEffect(() => {
-    //     dispatch()
-    // }, []);
+    useEffect(() => {
+        dispatch(createNewSpot(spot))
+    }, [dispatch]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -55,7 +56,7 @@ const CreateSpotForm = () => {
 
         if (errors.length > 0) return setErrors(errors);
 
-        const spot = {
+        spot = {
             address,
             city,
             state,
@@ -67,14 +68,14 @@ const CreateSpotForm = () => {
             price
         };
 
-        let res = dispatch(createNewSpot(spot))
-            .catch(async (res) => {
-                const data = await res.json();
-                console.log(data)
-                if (data && data.errors) setErrors(data.errors);
+        // let res = await dispatch(createNewSpot(spot))
+        //     .catch(async (res) => {
+        //         const data = await res.json();
+        //         console.log(data)
+        //         if (data && data.errors) setErrors(data.errors);
 
-            })
-        console.log(res)
+        //     })
+        // console.log(res)
         // .then(async (res) => {
         //     const data = await res.json();
         //     console.log(data)
@@ -82,7 +83,19 @@ const CreateSpotForm = () => {
 
         // const createdSpot = await res.json()
         // console.log(createdSpot)
-        history.push(`/spots/${res.id}`);
+        // history.push(`/spots/${res.id}`);
+
+        let addedSpot;
+
+        try {
+            addedSpot = await dispatch(createNewSpot(spot))
+        } catch (error) {
+            setErrors(errors);
+        }
+
+        if (addedSpot) {
+            history.push(`/spots/${addedSpot.id}`);
+        }
 
     };
 

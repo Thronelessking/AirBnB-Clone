@@ -46,14 +46,19 @@ const ReviewsList = ({ spotId }) => {
             {/* {allReviews.map(({ id, User, content, stars, createdAt }) => ( */}
             {reviews.map((review) => (
 
-                <div key={review.id}>
-                    <div className="user-profile-img">
-                        <img src="../../assets/img/user-profile-example-img.jpg" alt={review.User.firstName} />
+                <div key={review.id} className='review-display'>
+                    <div className="reviewer-details">
+                        <div className="user-profile-img">
+                            <img src="../../assets/img/user-profile-example-img.jpg" alt={review.User.firstName} />
 
+                        </div>
+                        <div className="users-review-container">
+                            <h3>{review.User.firstName}</h3>
+                            <p>{parseDate(review.createdAt)}</p>
+                        </div>
                     </div>
-                    <div className="users-review-container">
-                        <h3>{review.User.firstName}</h3>
-                        <p>{parseDate(review.createdAt)}</p>
+
+                    <div className="reviewer-message">
                         <p>{review.content}</p>
                     </div>
                 </div>

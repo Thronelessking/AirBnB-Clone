@@ -53,6 +53,17 @@ export const getAllSpots = () => async dispatch => {
         return data
     }
 };
+
+export const getSpotsBySearch = (maxLat, minLat, minLng, maxLng, minPrice, maxPrice) => async dispatch => {
+    const response = await csrfFetch(`/api/spots?maxLat=${maxLat}&&minLat=${minLat}&&maxLng=${maxLng}&&minLng=${minLng}&&minPrice=${minPrice}&&maxPrice=${maxPrice}`);
+
+
+    if (response.ok) {
+        const data = await response.json();
+        dispatch(loadSpots(data.Spots));
+        return data
+    }
+};
 //Get One Spot
 export const getOneSpot = (id) => async dispatch => {
     const response = await csrfFetch(`/api/spots/${id}`);
@@ -76,9 +87,10 @@ export const createNewSpot = (spot) => async dispatch => {
 
     const data = await response.json();
     dispatch(addOneSpot(data))
-    console.log(response, "response")
+
     if (response.ok) return data
-    return response;
+    // console.log(response, "response")
+    // return response;
 };
 
 // export const
@@ -124,18 +136,8 @@ const spotReducer = (state = initialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_ALL_SPOTS: {
-            // const allSpots = action.spots.Spots
-            // console.log(action.spots.Spots)
             action.spots.forEach((spot) => (newState[spot.id] = spot));
             return newState;
-            // const allSpots = {};
-            // action.spots.forEach((spot) => {
-            //     allSpots[spot.id] = spot;
-            // });
-            // return {
-            //     ...allSpots,
-            //     ...state,
-            // }
         };
         case ADD_OR_UPDATE_SPOT:
             newState[action.spot.id] = action.spot

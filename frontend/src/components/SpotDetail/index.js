@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOneSpot } from '../../store/spot';
+import { updateSpotById } from '../../store/spot';
 import { deleteSpotById } from '../../store/spot';
 import { getAllReviewsForSpot } from '../../store/reviews';
 // import { getAllReviewsForSpot } from '../../store/reviews';
@@ -11,6 +12,8 @@ import CreateBookingForm from '../CreateBookingForm';
 
 import './SpotDetail.css';
 import BookingsList from '../BookingBrowser';
+import { deleteBookingById } from '../../store/bookings';
+import Footer from '../Footer';
 
 const SpotDetail = ({ spot }) => {
 
@@ -34,7 +37,9 @@ const SpotDetail = ({ spot }) => {
     //useEffect
     useEffect(() => {
         dispatch(getOneSpot(spotId));
-        // dispatch(deleteSpotById(spotId))
+        dispatch(deleteSpotById(spotId))
+        dispatch(updateSpotById(spotId))
+        dispatch(deleteBookingById())
     }, [dispatch, spotId]);
 
     // useEffect(() => {
@@ -52,8 +57,17 @@ const SpotDetail = ({ spot }) => {
 
         dispatch(deleteSpotById(spotId))
 
-        history.push("/spots")
+        history.push("/")
     };
+
+    const editSpot = (e) => {
+        e.preventDefault();
+
+        dispatch(updateSpotById(spotId))
+
+        history.push(`/spots/${spotId}`)
+    };
+
 
 
     return (
@@ -61,6 +75,10 @@ const SpotDetail = ({ spot }) => {
             {
                 sessionUser.id === spot.Owner.id &&
                 <div className='user-permissions'>
+                    <button
+                        type='submit'
+                        onClick={editSpot}
+                    >Edit Spot</button>
                     <button
                         type='submit'
                         onClick={deleteSpot}
@@ -135,6 +153,7 @@ const SpotDetail = ({ spot }) => {
             <div className='spot-things-to-know'>
 
             </div>
+
         </div>
     );
 }
