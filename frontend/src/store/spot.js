@@ -60,7 +60,7 @@ export const getOneSpot = (id) => async dispatch => {
     if (response.ok) {
         const spot = await response.json();
         dispatch(addOneSpot(spot));
-        // return data
+        return response
     }
 };
 //Post New Spot = '/api/spots'
@@ -83,18 +83,18 @@ export const createNewSpot = (spot) => async dispatch => {
 
 // export const
 // //Edit/Put a Spot = `/api/spots/${id}`
-export const updateSpotById = (id) => async dispatch => {
-    const response = await csrfFetch(`/api/spots/${id}`, {
+export const updateSpotById = (spotId, spot) => async dispatch => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'put',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify(spot),
     });
 
-    const spot = await response.json();
-    dispatch(addOneSpot(spot))
-    return spot;
+    const data = await response.json();
+    dispatch(addOneSpot(data))
+    return data;
 };
 
 // //Delete a Spot = `/api/spots/${id}`

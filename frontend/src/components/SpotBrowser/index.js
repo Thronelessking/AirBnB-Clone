@@ -33,13 +33,13 @@ const SpotList = () => {
                 <Link key={spot.id} to={`/spots/${spot.id}`} target="_blank">
                     <div className="spot-post">
                         <div className="spot-preview-image">
-                            <i className="fa-regular fa-heart"></i>
+                            {/* <i className="fa-regular fa-heart"></i> */}
 
-                            <img src="#" alt="" />
+                            <img src="../assets/img/d-house-preview-image.jpg" alt={spot.name} />
                         </div>
-                        <img src="#" alt="" />
+
                         <div className="city-rating-container">
-                            <h1>{spot.id}</h1>
+                            {/* <h1>{spot.name}</h1> */}
                             <p className="location">{spot.state}, {spot.city}</p>
                             <p className="rating">{spot.avgRating}</p>
                         </div>

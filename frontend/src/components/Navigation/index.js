@@ -20,7 +20,7 @@ function Navigation({ isLoaded }) {
             <>
                 <NavLink to="/login">Log In</NavLink>
                 <NavLink to="/signup">Sign Up</NavLink>
-                <NavLink to="/new">New</NavLink>
+                {/* <NavLink to="/new">New</NavLink> */}
             </>
         );
     }

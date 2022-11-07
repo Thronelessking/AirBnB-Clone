@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory, Redirect } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getOneSpot } from '../../store/spot';
 import { deleteSpotById } from '../../store/spot';
@@ -61,6 +61,8 @@ const SpotDetail = ({ spot }) => {
             {
                 sessionUser.id === spot.Owner.id &&
                 <div className='user-permissions'>
+                    <Link to={`/spots/${spot.id}/edit`}>Edit Spot</Link>
+
                     <button
                         type='submit'
                         onClick={deleteSpot}
@@ -91,24 +93,33 @@ const SpotDetail = ({ spot }) => {
                     <h2>{spot.name} hosted by {spot.Owner.firstName}</h2>
                     <p>{spot.description}</p>
                 </div>
-
-                <div className='spot-booking-form-container'>
-                    <div className="spot-booking-container">
-                        <h3>${spot.price} night</h3>
-                        <h3><i className="fa-solid fa-star"></i> {spot.avgRating} | {spot.Reviews?.length}</h3>
-                        {/* <ul>
+                {
+                    sessionUser.id !== spot.Owner.id &&
+                    <div className='spot-booking-form-container'>
+                        <div className="spot-booking-container">
+                            <h3>${spot.price} night</h3>
+                            <h3><i className="fa-solid fa-star"></i> {spot.avgRating} | {spot.Reviews?.length}</h3>
+                            {/* <ul>
                             <li>rating</li>
                             <li><a href="#">reviews</a></li>
                         </ul> */}
+                        </div>
+
+                        <CreateBookingForm spotId={spot.id} />
+
+
                     </div>
-                    <CreateBookingForm spotId={spot.id} />
-                    {/* <a href='#'>Report this listing</a> */}
-                </div>
+                }
 
             </div>
 
             <ReviewBrowser spotId={spot.id} />
-            <BookingsList spotId={spot.id} />
+
+            {
+                sessionUser.id !== spot.Owner.id &&
+                <BookingsList spotId={spot.id} />
+            }
+
             <div className='google-maps'>
                 <h3>Where you'll be</h3>
                 <div></div>

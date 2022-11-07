@@ -31,3 +31,20 @@ header div.container div.logo img {
 header div.container .nav-right {
     grid-column: column-end;
 }
+
+.nav-right nav li {
+    text-decoration: none;
+    list-style: none;
+}
+
+.nav-right nav li a {
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.nav-right nav li a:hover {
+    background-color: #FF5A5F;
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+}

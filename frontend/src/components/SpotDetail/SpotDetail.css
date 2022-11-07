@@ -131,3 +131,33 @@
     border-radius: 10px;
     box-shadow: 1px 1px 10px rgb(186, 186, 186);
 }
+
+.spot-booking-form-container {
+    border: 1px solid rgb(212, 212, 212);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 10px rgb(186, 186, 186);
+}
+
+.user-permissions {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    border: 1px solid rgb(185, 185, 185);
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.user-permissions button {
+    background-color: rgb(238, 30, 96);
+    border: 1px solid rgb(238, 30, 96);
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 0;
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    width: 150px;
+}

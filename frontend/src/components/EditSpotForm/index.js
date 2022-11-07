@@ -2,21 +2,37 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { updateSpotById } from '../../store/spot';
+import { getOneSpot } from '../../store/spot';
 import './EditSpotForm.css';
 
 const EditSpotForm = () => {
     const dispatch = useDispatch();
     const { spotId } = useParams();
-    const spot = useSelector(spotById(spotId))
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [state, setState] = useState("");
-    const [country, setCountry] = useState("");
-    const [lat, setLat] = useState("");
-    const [lng, setLng] = useState("");
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [price, setPrice] = useState("");
+    const history = useHistory();
+    // const spot = useSelector(getOneSpot(spotId))
+
+
+
+    const spotList = useSelector(state => {
+        return state.spots;
+    });
+
+    // const spotItem = spotObj[spotId]
+    const spot = spotList[spotId]
+
+
+
+
+
+    const [address, setAddress] = useState(spot.address);
+    const [city, setCity] = useState(spot.city);
+    const [state, setState] = useState(spot.state);
+    const [country, setCountry] = useState(spot.country);
+    const [lat, setLat] = useState(spot.lat);
+    const [lng, setLng] = useState(spot.lng);
+    const [name, setName] = useState(spot.name);
+    const [description, setDescription] = useState(spot.description);
+    const [price, setPrice] = useState(spot.price);
     const [errors, setErrors] = useState([])
 
     const updateAddress = (e) => setAddress(e.target.value);
@@ -68,12 +84,13 @@ const EditSpotForm = () => {
             price
         };
 
-        return dispatch(updateSpotById(spot))
+        let res = await dispatch(updateSpotById(spotId, spot))
             .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) setErrors(data.errors);
-            });
-
+            })
+        console.log(res)
+        history.push(`/spots/${res.id}`);
     };
 
     // let createdSpot;

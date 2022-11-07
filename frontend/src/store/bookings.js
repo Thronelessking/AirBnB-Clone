@@ -5,7 +5,7 @@
 
 import { csrfFetch } from "./csrf";
 
-const GET_ALL_BOOKINGS = 'bookings/getAllReviewsForSpot';
+const GET_ALL_BOOKINGS = 'bookings/GET_ALL_BOOKINGS';
 const ADD_OR_UPDATE_BOOKING = 'bookings/ADD_OR_UPDATE_BOOKING';
 const DELETE_BOOKING = 'bookings/DELETE_BOOKING'
 
@@ -38,6 +38,16 @@ export const getAllBookingsForSpot = (spotId) => async dispatch => {
         const data = await response.json();
         dispatch(loadBookings(data.Bookings));
         // return data
+    }
+};
+
+export const getOneBooking = (id) => async dispatch => {
+    const response = await csrfFetch(`/api/bookings/${id}`);
+
+    if (response.ok) {
+        const booking = await response.json();
+        dispatch(addBooking(booking));
+        return response
     }
 };
 
@@ -77,7 +87,7 @@ export const updateBooking = (bookingId) => async dispatch => {
 
     const booking = await response.json();
     dispatch(addBooking(booking))
-    return booking;
+    return response;
 }
 
 export const deleteBookingById = (bookingId) => async dispatch => {

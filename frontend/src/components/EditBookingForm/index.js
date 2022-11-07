@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory, Redirect } from 'react-router-dom';
-import { createNewBooking } from '../../store/bookings';
-import './CreateBookingForm.css';
+import { useHistory, useParams } from 'react-router-dom';
+import { updateBooking, getOneBooking } from '../../store/bookings'
+import './EditBookingForm.css';
 
-const CreateBookingForm = ({ spotId }) => {
+const EditBookingForm = ({ spotId }) => {
     const dispatch = useDispatch();
-
+    const { bookingId } = useParams();
+    const booking = useSelector(getOneBooking(bookingId))
     // const { spotId } = useParams();
     console.log("From Create Booking Form " + spotId)
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState(booking.startDate);
+    const [endDate, setEndDate] = useState(booking.endDate);
     const [errors, setErrors] = useState([])
 
     const updateStartDate = (e) => setStartDate(e.target.value)
@@ -30,7 +31,7 @@ const CreateBookingForm = ({ spotId }) => {
             startDate, endDate
         };
 
-        let createdBooking = dispatch(createNewBooking(newBooking, spotId))
+        let createdBooking = dispatch(updateBooking(bookingId))
             .catch(async (createdBooking) => {
                 const data = await createdBooking.json();
                 console.log(data)
@@ -40,28 +41,11 @@ const CreateBookingForm = ({ spotId }) => {
                 setStartDate("")
 
             })
-        // let createdPokemon;
-
-        // try {
-        //     createdPokemon = await dispatch(createPokemon(payload));
-        // } catch (error) {
-        //     if (error instanceof ValidationError) setErrorMessages(error.errors);
-        //     // If error is not a ValidationError, add slice at the end to remove extra
-        //     // "Error: "
-        //     else setErrorMessages({ overall: error.toString().slice(7) })
-        // }
-        // //!!END
-        // if (createdPokemon) {
-        //     //!!START SILENT
-        //     setErrorMessages({});
-        //     //!!END
-        //     history.push(`/pokemon/${createdPokemon.id}`);
-        //     hideForm();
-        // }
     };
 
     return (
         <div className='booking-form'>
+            <h1>Update Booking</h1>
             <ul className='errors-handling'>
                 {errors.map((error, idx) => <li key={idx}>*{error}*</li>)}
             </ul>
@@ -89,6 +73,6 @@ const CreateBookingForm = ({ spotId }) => {
             </form>
         </div>
     );
-};
+}
 
-export default CreateBookingForm;
+export default EditBookingForm;
