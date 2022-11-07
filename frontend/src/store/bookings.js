@@ -1,8 +1,3 @@
-// delete `/api/bookings/${bookingId}`
-// put `/api/bookings/${bookingId}`
-// post `/api/${spotId}/bookings`
-// get `/:spotId/bookings`
-
 import { csrfFetch } from "./csrf";
 
 const GET_ALL_BOOKINGS = 'bookings/getAllReviewsForSpot';
@@ -37,18 +32,17 @@ export const getAllBookingsForSpot = (spotId) => async dispatch => {
     if (response.ok) {
         const data = await response.json();
         dispatch(loadBookings(data.Bookings));
-        // return data
     }
 };
 
 export const getAllBookingsForCurrentUser = (userId) => async dispatch => {
     const response = await csrfFetch(`/api/spots/${userId}/bookings`);
 
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(loadBookings(data.Bookings));
-        // return data
-    }
+    // if (response.ok) {
+    const data = await response.json();
+    dispatch(loadBookings(data.Bookings));
+    if (response.ok) return data
+    // }
 };
 
 export const createNewBooking = (booking, spotId) => async dispatch => {
@@ -63,7 +57,6 @@ export const createNewBooking = (booking, spotId) => async dispatch => {
     const data = await response.json();
     dispatch(addBooking(data))
     if (response.ok) return data
-    // return response;
 };
 
 export const updateBooking = (bookingId) => async dispatch => {
@@ -90,7 +83,7 @@ export const deleteBookingById = (bookingId) => async dispatch => {
 
     const data = await response.json();
     dispatch(deleteBooking(data.id))
-    return response;
+    if (response.ok) return data
 }
 
 const initialState = {};

@@ -45,9 +45,9 @@ const CreateSpotForm = ({ spot }) => {
     }
 
 
-    useEffect(() => {
-        dispatch(createNewSpot(spot))
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(createNewSpot(spot))
+    // }, [dispatch]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -68,13 +68,17 @@ const CreateSpotForm = ({ spot }) => {
             price
         };
 
-        // let res = await dispatch(createNewSpot(spot))
-        //     .catch(async (res) => {
-        //         const data = await res.json();
-        //         console.log(data)
-        //         if (data && data.errors) setErrors(data.errors);
+        let res = await dispatch(createNewSpot(spot))
+            .catch(async (res) => {
+                const data = await res.json();
+                console.log(data)
+                if (data && data.errors) setErrors(data.errors);
+            })
 
-        //     })
+        // if (res) {
+        // setErrors({});
+        history.push(`/spots/${res.id}`);
+        // }
         // console.log(res)
         // .then(async (res) => {
         //     const data = await res.json();
@@ -85,17 +89,17 @@ const CreateSpotForm = ({ spot }) => {
         // console.log(createdSpot)
         // history.push(`/spots/${res.id}`);
 
-        let addedSpot;
+        // let addedSpot;
 
-        try {
-            addedSpot = await dispatch(createNewSpot(spot))
-        } catch (error) {
-            setErrors(errors);
-        }
+        // try {
+        //     addedSpot = await dispatch(createNewSpot(spot))
+        // } catch (error) {
+        //     setErrors(errors);
+        // }
 
-        if (addedSpot) {
-            history.push(`/spots/${addedSpot.id}`);
-        }
+        // if (addedSpot) {
+        //     history.push(`/spots/${addedSpot.id}`);
+        // }
 
     };
 

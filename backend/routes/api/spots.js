@@ -804,7 +804,14 @@ router.post('/',
         // } else if (!price) {
         // } else {
         const user = await User.findByPk(userId)
-        const spot = await Spot.create({ ownerId: userId, address, city, state, country, lat, lng, name, description, price });
+        const spot = await Spot.create({
+            ownerId: userId, address, city, state, country, lat, lng, name, description, price, Owner: user, include: [
+                {
+                    model: User,
+                    as: 'Owner'
+                }
+            ],
+        });
         // //const Spot = [userId, address, city, state, country, lat, lng, name, description, price]
         res.json(spot);
         //}

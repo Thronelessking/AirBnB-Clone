@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import SpotList from './components/SpotBrowser';
 import SpotDetail from './components/SpotDetail';
 import CreateSpotForm from './components/CreateSpotForm';
+import EditSpotForm from './components/EditSpotForm';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 
@@ -37,6 +38,9 @@ function App() {
           </Route>
           <Route exact path="/new">
             <CreateSpotForm />
+          </Route>
+          <Route exact path="/spots/:spotId/edit">
+            <EditSpotForm />
           </Route>
           <Route path="*">
             <PageNotFound />

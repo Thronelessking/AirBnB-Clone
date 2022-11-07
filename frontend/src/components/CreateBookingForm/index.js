@@ -8,7 +8,7 @@ const CreateBookingForm = ({ spotId }) => {
     const dispatch = useDispatch();
 
     // const { spotId } = useParams();
-    console.log("From Create Booking Form " + spotId)
+    // console.log("From Create Booking Form " + spotId)
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [errors, setErrors] = useState([])
@@ -30,31 +30,16 @@ const CreateBookingForm = ({ spotId }) => {
             startDate, endDate
         };
 
-        let createdBooking = dispatch(createNewBooking(newBooking, spotId))
+        dispatch(createNewBooking(newBooking, spotId))
             .catch(async (createdBooking) => {
                 const data = await createdBooking.json();
                 console.log(data)
                 if (data && data.errors) setErrors(data.errors);
-
+                if (data.statusCode === 403) setErrors([data.message])
+                setEndDate("")
+                setStartDate("")
             })
-        // let createdPokemon;
-
-        // try {
-        //     createdPokemon = await dispatch(createPokemon(payload));
-        // } catch (error) {
-        //     if (error instanceof ValidationError) setErrorMessages(error.errors);
-        //     // If error is not a ValidationError, add slice at the end to remove extra
-        //     // "Error: "
-        //     else setErrorMessages({ overall: error.toString().slice(7) })
-        // }
-        // //!!END
-        // if (createdPokemon) {
-        //     //!!START SILENT
-        //     setErrorMessages({});
-        //     //!!END
-        //     history.push(`/pokemon/${createdPokemon.id}`);
-        //     hideForm();
-        // }
+        return createNewBooking
     };
 
     return (

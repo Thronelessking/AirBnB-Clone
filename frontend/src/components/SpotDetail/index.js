@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, useHistory, Redirect } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getOneSpot } from '../../store/spot';
-import { updateSpotById } from '../../store/spot';
-import { deleteSpotById } from '../../store/spot';
+import { createNewSpot, getAllSpots, getOneSpot, updateSpotById, deleteSpotById } from '../../store/spot';
 import { getAllReviewsForSpot } from '../../store/reviews';
 // import { getAllReviewsForSpot } from '../../store/reviews';
 // import * as sessionActions from '../../store/session';
@@ -12,11 +10,10 @@ import CreateBookingForm from '../CreateBookingForm';
 
 import './SpotDetail.css';
 import BookingsList from '../BookingBrowser';
-import { deleteBookingById } from '../../store/bookings';
-import Footer from '../Footer';
+
 
 const SpotDetail = ({ spot }) => {
-
+    // const [bookings, setBookings] = useState(false)
     const sessionUser = useSelector(state => state.session.user);
 
     const { spotId } = useParams();
@@ -31,22 +28,25 @@ const SpotDetail = ({ spot }) => {
     // )
     // const spotInfo = Object.values(spot)
     console.log(spot)
+    console.log(sessionUser.id)
     const dispatch = useDispatch();
     //useStates
 
     //useEffect
     useEffect(() => {
-        dispatch(getOneSpot(spotId));
-        dispatch(deleteSpotById(spotId))
-        dispatch(updateSpotById(spotId))
-        dispatch(deleteBookingById())
+        dispatch(getAllSpots())
+        // dispatch(getOneSpot(spotId));
+        // dispatch(deleteSpotById(spotId))
+        // dispatch(updateSpotById(spotId))
+        // dispatch(deleteBookingById())
+        // setBookings(true)
     }, [dispatch, spotId]);
 
     // useEffect(() => {
     //     dispatch(getAllReviewsForSpot(spotId));
     // }, [dispatch, spotId]);
 
-    if (!spot) {
+    if (!spot.id) {
         return null;
     }
     // function userPermissions(){
@@ -60,13 +60,13 @@ const SpotDetail = ({ spot }) => {
         history.push("/")
     };
 
-    const editSpot = (e) => {
-        e.preventDefault();
+    // const editSpot = (e) => {
+    //     e.preventDefault();
 
-        dispatch(updateSpotById(spotId))
+    //     dispatch(updateSpotById(spotId))
 
-        history.push(`/spots/${spotId}`)
-    };
+    //     history.push(`/spots/${spotId}`)
+    // };
 
 
 
@@ -75,10 +75,12 @@ const SpotDetail = ({ spot }) => {
             {
                 sessionUser.id === spot.Owner.id &&
                 <div className='user-permissions'>
-                    <button
-                        type='submit'
+                    {/* <button
+                        type='submit'      
                         onClick={editSpot}
-                    >Edit Spot</button>
+                    >Edit Spot</button> */}
+                    <Link to={`/spots/${spot.id}/edit`}>Edit Spot</Link>
+
                     <button
                         type='submit'
                         onClick={deleteSpot}

@@ -3,6 +3,7 @@ const GET_ALL_SPOTS = 'spots/GET_ALL_SPOTS';
 const ADD_OR_UPDATE_SPOT = 'spots/ADD_OR_UPDATE_SPOT';
 const DELETE_SPOT = 'spots/DELETE_SPOT';
 const CREATE_SPOT = 'spots/CREATE_SPOT';
+const GET_SPOT = 'spots/GET_SPOT'
 
 
 // =========================
@@ -12,6 +13,13 @@ const loadSpots = (spots) => {
     return {
         type: GET_ALL_SPOTS,
         spots
+    }
+};
+
+const loadSpot = (id) => {
+    return {
+        type: GET_SPOT,
+        id
     }
 };
 
@@ -70,8 +78,8 @@ export const getOneSpot = (id) => async dispatch => {
 
     if (response.ok) {
         const spot = await response.json();
-        dispatch(addOneSpot(spot));
-        // return data
+        dispatch(loadSpot(spot.Spots[id]));
+        return spot
     }
 };
 //Post New Spot = '/api/spots'
@@ -95,18 +103,18 @@ export const createNewSpot = (spot) => async dispatch => {
 
 // export const
 // //Edit/Put a Spot = `/api/spots/${id}`
-export const updateSpotById = (id) => async dispatch => {
-    const response = await csrfFetch(`/api/spots/${id}`, {
+export const updateSpotById = (spotId, spot) => async dispatch => {
+    const response = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'put',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify(spot),
     });
 
-    const spot = await response.json();
-    dispatch(addOneSpot(spot))
-    return spot;
+    const data = await response.json();
+    dispatch(addOneSpot(data))
+    if (response.ok) return data
 };
 
 // //Delete a Spot = `/api/spots/${id}`
