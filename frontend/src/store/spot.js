@@ -70,8 +70,8 @@ export const getOneSpot = (id) => async dispatch => {
 
     if (response.ok) {
         const spot = await response.json();
-        dispatch(loadSpots(spot));
-        return spot
+        dispatch(addOneSpot(spot));
+        // return spot
     }
 };
 //Post New Spot = '/api/spots'

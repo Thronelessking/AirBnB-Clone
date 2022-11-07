@@ -52,9 +52,9 @@ const SpotDetail = () => {
     //     dispatch(getAllReviewsForSpot(spotId));
     // }, [dispatch, spotId]);
 
-    // if (!spot.id) {
-    //     return null;
-    // }
+    if (!spot) {
+        return null;
+    }
     // function userPermissions(){
 
     // }
