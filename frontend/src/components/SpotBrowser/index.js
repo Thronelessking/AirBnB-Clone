@@ -4,6 +4,7 @@ import { Link, Route, useParams } from 'react-router-dom';
 import SpotDetail from '../SpotDetail'
 import { getAllSpots } from "../../store/spot";
 import './SpotBrowser.css';
+import SpotIndex from "../SpotIndex";
 
 const SpotList = () => {
     const spots = [];
@@ -27,7 +28,7 @@ const SpotList = () => {
     return (
         <div id="spot-container">
             {/* <h1>Spots</h1> */}
-            {spots.map((spot) => (
+            {spots.map(spot => (
                 // <p key={id}>{name}</p>
                 // <a href="#">
                 <Link key={spot.id} to={`/spots/${spot.id}`} target="_blank">
@@ -39,7 +40,7 @@ const SpotList = () => {
                         </div>
                         <img src="#" alt="" />
                         <div className="city-rating-container">
-                            <h1>{spot.id}</h1>
+                            <h1>{spot.Owner.firstName}</h1>
                             <p className="location">{spot.state}, {spot.city}</p>
                             <p className="rating">{spot.avgRating}</p>
                         </div>
@@ -49,12 +50,17 @@ const SpotList = () => {
                     </div>
                 </Link>
                 // </a>
+                // <SpotIndex
+                //     spot={spot}
+                //     key={spot.id}
+                // />
 
             ))}
+
             {/* <h1>{id}</h1> */}
-            <Route path="/spots/:spotId">
+            {/* <Route path="/spots/:spotId">
                 <SpotDetail />
-            </Route>
+            </Route> */}
         </div>
 
     );

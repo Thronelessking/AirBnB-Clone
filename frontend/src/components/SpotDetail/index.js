@@ -12,13 +12,19 @@ import './SpotDetail.css';
 import BookingsList from '../BookingBrowser';
 
 
-const SpotDetail = ({ spot }) => {
+const SpotDetail = () => {
     // const [bookings, setBookings] = useState(false)
     const sessionUser = useSelector(state => state.session.user);
 
     const { spotId } = useParams();
+    // const spotList = useSelector(state => {
+    //     return state.spots;
+    // });
+    // const spot = spotList[spotId]
     const history = useHistory();
-    spot = useSelector(state => state.spots[spotId]);
+    const spot = useSelector(state => {
+        return state.spots;
+    });
 
     // const reviews = useSelector(state => state.reviews[spotId]);
 
@@ -27,15 +33,15 @@ const SpotDetail = ({ spot }) => {
     // }
     // )
     // const spotInfo = Object.values(spot)
-    console.log(spot)
-    console.log(sessionUser.id)
+    // console.log(spotId, spotList)
+    // console.log(sessionUser.id)
     const dispatch = useDispatch();
     //useStates
 
     //useEffect
     useEffect(() => {
-        dispatch(getAllSpots())
-        // dispatch(getOneSpot(spotId));
+        // dispatch(getAllSpots());
+        dispatch(getOneSpot(spotId));
         // dispatch(deleteSpotById(spotId))
         // dispatch(updateSpotById(spotId))
         // dispatch(deleteBookingById())
@@ -46,9 +52,9 @@ const SpotDetail = ({ spot }) => {
     //     dispatch(getAllReviewsForSpot(spotId));
     // }, [dispatch, spotId]);
 
-    if (!spot.id) {
-        return null;
-    }
+    // if (!spot.id) {
+    //     return null;
+    // }
     // function userPermissions(){
 
     // }
